@@ -2,12 +2,34 @@
 <html lang="az">
 <head>
   <meta charset="UTF-8" />
-  <title>Azərbaycan əlifbası ilə kripto alət (Sezar, Atbash, Substitution)</title>
+  <title>Azərbaycan əlifbası ilə kripto alət – Hüquq nədir?</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg: #f5f4ff;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --border: #cbd5e1;
+      --border-soft: #e5e7eb;
+      --accent1: #8b5cf6;
+      --accent2: #ec4899;
+      --shadow-strong: 0 18px 45px rgba(15, 23, 42, 0.16);
+      --shadow-soft: 0 8px 18px rgba(148, 163, 184, 0.45);
       color-scheme: light;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body.dark {
+      --bg: #020617;
+      --bg-card: #020617;
+      --text-main: #e5e7eb;
+      --text-sub: #9ca3af;
+      --border: #4b5563;
+      --border-soft: #374151;
+      --shadow-strong: 0 22px 55px rgba(0, 0, 0, 0.85);
+      --shadow-soft: 0 10px 26px rgba(15, 23, 42, 0.75);
+      color-scheme: dark;
     }
 
     body {
@@ -16,25 +38,31 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at top, #f5f0ff, #e0ecff);
+      background: radial-gradient(circle at top, #f9f5ff, var(--bg));
+      transition: background 0.2s ease;
+    }
+
+    body.dark {
+      background: radial-gradient(circle at top, #111827, #020617);
     }
 
     .card {
-      background: #ffffff;
-      max-width: 900px;
+      background: var(--bg-card);
+      max-width: 980px;
       width: 100%;
       margin: 16px;
       padding: 24px 28px;
-      border-radius: 18px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+      border-radius: 20px;
+      box-shadow: var(--shadow-strong);
       box-sizing: border-box;
+      border: 1px solid rgba(148, 163, 184, 0.25);
     }
 
     h1 {
       margin-top: 0;
       font-size: 1.7rem;
       text-align: center;
-      color: #1f2937;
+      color: var(--text-main);
     }
 
     p.subtitle {
@@ -42,13 +70,13 @@
       margin-bottom: 18px;
       font-size: 0.95rem;
       text-align: center;
-      color: #4b5563;
+      color: var(--text-sub);
     }
 
     label {
       font-size: 0.9rem;
       font-weight: 600;
-      color: #111827;
+      color: var(--text-main);
       display: block;
       margin-bottom: 6px;
     }
@@ -58,16 +86,18 @@
       min-height: 90px;
       resize: vertical;
       padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      border: 1px solid var(--border);
       font-size: 0.95rem;
       box-sizing: border-box;
       outline: none;
+      background: var(--bg-card);
+      color: var(--text-main);
     }
 
     textarea:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.25);
+      border-color: var(--accent1);
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35);
     }
 
     input[type="number"],
@@ -76,371 +106,21 @@
       width: 100%;
       padding: 8px 10px;
       border-radius: 10px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border);
       font-size: 0.95rem;
       box-sizing: border-box;
       outline: none;
-      background: #ffffff;
+      background: var(--bg-card);
+      color: var(--text-main);
     }
 
     input[type="number"]:focus,
     input[type="text"]:focus,
     select:focus {
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.25);
+      border-color: var(--accent1);
+      box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.3);
     }
 
     .row {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 14px;
-      margin-bottom: 10px;
-    }
-
-    .col {
-      flex: 1;
-      min-width: 220px;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-      margin-bottom: 10px;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 8px 18px;
-      font-size: 0.93rem;
-      cursor: pointer;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: transform 0.06s ease, box-shadow 0.06s ease, background 0.15s ease;
-    }
-
-    button.primary {
-      background: linear-gradient(135deg, #8b5cf6, #ec4899);
-      color: white;
-      box-shadow: 0 8px 18px rgba(139, 92, 246, 0.35);
-    }
-
-    button.secondary {
-      background: #eef2ff;
-      color: #4338ca;
-      box-shadow: 0 4px 10px rgba(148, 163, 184, 0.3);
-    }
-
-    button:active {
-      transform: translateY(1px) scale(0.99);
-      box-shadow: none;
-    }
-
-    .output-box {
-      margin-top: 4px;
-      background: #f8fafc;
-      border-radius: 10px;
-      padding: 10px 12px;
-      min-height: 60px;
-      border: 1px solid #e5e7eb;
-      font-size: 0.95rem;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .helper {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-top: 3px;
-    }
-
-    .alphabet {
-      font-size: 0.78rem;
-      color: #6b7280;
-      margin-top: 10px;
-      border-top: 1px dashed #e5e7eb;
-      padding-top: 8px;
-    }
-
-    .alphabet strong {
-      color: #111827;
-    }
-
-    .small {
-      font-size: 0.78rem;
-    }
-
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.8rem;
-      background: #f3f4ff;
-      padding: 2px 4px;
-      border-radius: 4px;
-    }
-
-    @media (max-width: 600px) {
-      .card {
-        padding: 18px 16px;
-      }
-      h1 {
-        font-size: 1.4rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Azərbaycan əlifbası ilə kripto alət</h1>
-    <p class="subtitle">
-      Sezar, Atbash və Substitution şifrələri. Mətn yaz, metodu seç, açarı daxil et və nəticəyə bax.
-    </p>
-
-    <label for="inputText">Mətn</label>
-    <textarea id="inputText" placeholder="Buraya şifrələmək və ya açmaq istədiyiniz mətni yazın..."></textarea>
-
-    <div class="row">
-      <div class="col">
-        <label for="method">Şifrələmə metodu</label>
-        <select id="method">
-          <option value="caesar">Caesar (Sezar, sürüşmə ilə)</option>
-          <option value="atbash">Atbash (əlifbanı tərsinə çevir)</option>
-          <option value="substitution">Substitution (əlifbanı əvəz etmə)</option>
-          <option value="reverse">Reverse (mətni tərsinə yaz)</option>
-        </select>
-        <div class="helper">
-          Metodu seçin. Caesar üçün açar lazımdır, Atbash və Reverse açarsız işləyir.
-        </div>
-      </div>
-
-      <div class="col" id="shiftCol">
-        <label for="shift">Açar (Sezar sürüşməsi)</label>
-        <input id="shift" type="number" value="3" />
-        <div class="helper">Məsələn: 1, 3, 5, 7... Deşifrələmək üçün eyni açarı yenə istifadə edin.</div>
-      </div>
-    </div>
-
-    <div class="row" id="substitutionRow" style="display: none;">
-      <div class="col">
-        <label for="substAlphabet">Substitution əlifbası</label>
-        <input
-          id="substAlphabet"
-          type="text"
-          placeholder="32 hərf – öz əvəzləmə əlifbanızı yazın"
-        />
-        <div class="helper">
-          Məsələn, tərsinə əlifba üçün: <code>Z Y Z V Ü U T Ş S R P Ö O N M L Q K J İ I X H Ğ G F Ə E D Ç C B A</code>
-          (boşluqsuz yazın).
-        </div>
-      </div>
-    </div>
-
-    <div class="buttons">
-      <button class="primary" id="encryptBtn">Şifrələ</button>
-      <button class="secondary" id="decryptBtn">Aç (deşifrələ)</button>
-      <button class="secondary" id="copyBtn">Nəticəni kopyala</button>
-      <button class="secondary" id="clearBtn">Təmizlə</button>
-    </div>
-
-    <label>Nəticə</label>
-    <div id="output" class="output-box"></div>
-
-    <div class="alphabet">
-      <div class="small">
-        <strong>İstifadə olunan əlifba:</strong>
-      </div>
-      <div class="small">
-        A B C Ç D E Ə F G Ğ H X I İ J K Q L M N O Ö P R S Ş T U Ü V Y Z
-      </div>
-      <div class="helper">
-        Digər simvollar (boşluq, rəqəmlər, nöqtə və s.) olduğu kimi saxlanılır. Substitution üçün 32 hərf
-        uzunluğunda əlifba yazmağınız lazımdır.
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Azərbaycan əlifbası – sənin verdiyin sıraya görə
-    const AZ_UPPER = "ABCÇDEƏFGĞHXIİJKQLMNOÖPRSŞTUÜVYZ";
-    const AZ_LOWER = "abcçdeəfgğhxıijkqlmnoöprsştuüvyz";
-
-    function normalizeShift(shift) {
-      const n = AZ_UPPER.length;
-      return ((shift % n) + n) % n;
-    }
-
-    function caesarAz(text, shift) {
-      const n = AZ_UPPER.length;
-      const s = normalizeShift(shift);
-      let result = "";
-      for (const ch of text) {
-        const uIdx = AZ_UPPER.indexOf(ch);
-        const lIdx = AZ_LOWER.indexOf(ch);
-        if (uIdx !== -1) {
-          const newIdx = (uIdx + s) % n;
-          result += AZ_UPPER[newIdx];
-        } else if (lIdx !== -1) {
-          const newIdx = (lIdx + s) % n;
-          result += AZ_LOWER[newIdx];
-        } else {
-          result += ch;
-        }
-      }
-      return result;
-    }
-
-    function atbashAz(text) {
-      const n = AZ_UPPER.length;
-      let result = "";
-      for (const ch of text) {
-        const uIdx = AZ_UPPER.indexOf(ch);
-        const lIdx = AZ_LOWER.indexOf(ch);
-        if (uIdx !== -1) {
-          const newIdx = n - 1 - uIdx;
-          result += AZ_UPPER[newIdx];
-        } else if (lIdx !== -1) {
-          const newIdx = n - 1 - lIdx;
-          result += AZ_LOWER[newIdx];
-        } else {
-          result += ch;
-        }
-      }
-      return result;
-    }
-
-    function substitutionAz(text, substUpper, substLower, invert = false) {
-      // substUpper / substLower: 32 hərflik xəritə
-      const n = AZ_UPPER.length;
-      let mapUpper = {};
-      let mapLower = {};
-
-      if (!invert) {
-        // normal: AZ_UPPER -> substUpper
-        for (let i = 0; i < n; i++) {
-          mapUpper[AZ_UPPER[i]] = substUpper[i];
-          mapLower[AZ_LOWER[i]] = substLower[i];
-        }
-      } else {
-        // tərs xəritə: substUpper -> AZ_UPPER
-        for (let i = 0; i < n; i++) {
-          mapUpper[substUpper[i]] = AZ_UPPER[i];
-          mapLower[substLower[i]] = AZ_LOWER[i];
-        }
-      }
-
-      let result = "";
-      for (const ch of text) {
-        const uIdx = AZ_UPPER.indexOf(ch);
-        const lIdx = AZ_LOWER.indexOf(ch);
-        if (uIdx !== -1) {
-          result += mapUpper[ch] || ch;
-        } else if (lIdx !== -1) {
-          result += mapLower[ch] || ch;
-        } else {
-          result += ch;
-        }
-      }
-      return result;
-    }
-
-    function reverseText(text) {
-      return [...text].reverse().join("");
-    }
-
-    // UI elementləri
-    const inputText = document.getElementById("inputText");
-    const methodSelect = document.getElementById("method");
-    const shiftCol = document.getElementById("shiftCol");
-    const shiftInput = document.getElementById("shift");
-    const substitutionRow = document.getElementById("substitutionRow");
-    const substAlphabetInput = document.getElementById("substAlphabet");
-    const encryptBtn = document.getElementById("encryptBtn");
-    const decryptBtn = document.getElementById("decryptBtn");
-    const copyBtn = document.getElementById("copyBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const outputBox = document.getElementById("output");
-
-    // Substitution üçün defolt: tərsinə əlifba (boşluqsuz)
-    const defaultSubstUpper = [...AZ_UPPER].reverse().join("");
-    const defaultSubstLower = [...AZ_LOWER].reverse().join("");
-    substAlphabetInput.value = defaultSubstUpper;
-
-    methodSelect.addEventListener("change", () => {
-      const method = methodSelect.value;
-      if (method === "caesar") {
-        shiftCol.style.display = "block";
-        substitutionRow.style.display = "none";
-      } else if (method === "substitution") {
-        shiftCol.style.display = "none";
-        substitutionRow.style.display = "block";
-      } else {
-        shiftCol.style.display = "none";
-        substitutionRow.style.display = "none";
-      }
-    });
-
-    function runCipher(mode) {
-      const method = methodSelect.value;
-      const text = inputText.value || "";
-      let result = "";
-
-      if (!text) {
-        outputBox.textContent = "";
-        return;
-      }
-
-      if (method === "caesar") {
-        const shiftVal = parseInt(shiftInput.value || "0", 10) || 0;
-        const effShift = mode === "encrypt" ? shiftVal : -shiftVal;
-        result = caesarAz(text, effShift);
-      } else if (method === "atbash") {
-        // Atbash həm şifrələmə, həm açma üçün eyni funksiya
-        result = atbashAz(text);
-      } else if (method === "substitution") {
-        let subst = substAlphabetInput.value.replace(/\s+/g, "");
-        if (subst.length !== AZ_UPPER.length) {
-          alert("Substitution əlifbanız 32 hərfdən ibarət olmalıdır (boşluqsuz).");
-          return;
-        }
-
-        // Upper/lower uyğunlaşdırırıq
-        subst = subst.toUpperCase();
-        const substUpper = subst;
-        const substLower = subst.toLowerCase();
-
-        const invert = mode === "decrypt";
-        result = substitutionAz(text, substUpper, substLower, invert);
-      } else if (method === "reverse") {
-        // Reverse üçün encrypt/decrypt eyni məna daşıyır
-        result = reverseText(text);
-      }
-
-      outputBox.textContent = result;
-    }
-
-    encryptBtn.addEventListener("click", () => runCipher("encrypt"));
-    decryptBtn.addEventListener("click", () => runCipher("decrypt"));
-
-    copyBtn.addEventListener("click", async () => {
-      const text = outputBox.textContent.trim();
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-        copyBtn.textContent = "Kopyalandı ✓";
-        setTimeout(() => (copyBtn.textContent = "Nəticəni kopyala"), 1200);
-      } catch (e) {
-        alert("Kopyalama alınmadı. Brauzer icazəsini yoxlayın.");
-      }
-    });
-
-    clearBtn.addEventListener("click", () => {
-      inputText.value = "";
-      outputBox.textContent = "";
-    });
-  </script>
-</body>
-</html>
