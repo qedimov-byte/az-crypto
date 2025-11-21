@@ -88,11 +88,13 @@
       max-width: 980px;
       width: 100%;
       margin: 16px;
-      padding: 24px 28px;
+      padding: 24px 28px 30px 28px;
       border-radius: 22px;
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
       box-sizing: border-box;
       border: 1px solid rgba(244, 193, 92, 0.3);
+      position: relative;
+      overflow: hidden;
     }
 
     h1 {
@@ -390,6 +392,99 @@
       color: var(--text-main);
     }
 
+    .tests {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-soft);
+    }
+
+    .tests h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.05rem;
+      color: var(--accent1);
+    }
+
+    .test-question {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: var(--chip-bg);
+      border: 1px solid var(--border-soft);
+      font-size: 0.86rem;
+    }
+
+    .test-question-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .test-options {
+      margin-top: 4px;
+    }
+
+    .test-option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+      font-size: 0.83rem;
+      color: var(--text-sub);
+    }
+
+    .test-option input {
+      margin: 0;
+    }
+
+    .test-result {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(244, 193, 92, 0.5);
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+    }
+
+    .strength {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-soft);
+    }
+
+    .strength h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.05rem;
+      color: var(--accent1);
+    }
+
+    .strength-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+      align-items: center;
+    }
+
+    .strength-row input {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .strength-result {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      background: rgba(15, 23, 42, 0.65);
+      display: none;
+    }
+
+    .strength-score {
+      font-weight: 700;
+    }
+
     .about {
       margin-top: 18px;
       padding-top: 10px;
@@ -402,9 +497,63 @@
       color: var(--text-main);
     }
 
+    /* Motivasiya overlay – glowing animation */
+    .mot-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(circle at center, rgba(244, 193, 92, 0.25), rgba(0, 0, 0, 0.8));
+      transition: opacity 0.4s ease;
+      z-index: 10;
+    }
+
+    .mot-overlay.show {
+      opacity: 1;
+    }
+
+    .mot-inner {
+      max-width: 420px;
+      padding: 16px 20px;
+      border-radius: 22px;
+      background: rgba(10, 16, 35, 0.96);
+      text-align: center;
+      box-shadow: 0 0 40px rgba(244, 193, 92, 0.9);
+      transform: translateY(20px);
+      animation: floatUp 0.8s ease-out forwards;
+    }
+
+    .mot-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent1);
+      margin-bottom: 4px;
+    }
+
+    .mot-quote {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      font-style: italic;
+    }
+
+    @keyframes floatUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-6px);
+      }
+    }
+
     @media (max-width: 600px) {
       .card {
-        padding: 18px 16px;
+        padding: 18px 16px 24px 16px;
       }
       h1 {
         font-size: 1.5rem;
@@ -546,6 +695,36 @@
       <div id="puzzleGrid" class="puzzle-grid"></div>
     </div>
 
+    <div class="tests">
+      <h2>“Hüquq nədir?” üzrə idrak testi</h2>
+      <p class="helper">
+        Qısa cavablar vasitəsilə hüquqa yanaşma tərzinizi sınayın. Nəticədə hansı tərəfinizin daha güclü
+        olduğu barədə ipucu alacaqsınız: ədalət hissi, analitik düşüncə, motivasiya və ya praktiklik.
+      </p>
+      <div id="testQuestions"></div>
+      <button id="testEvalBtn" type="button" class="secondary" style="margin-top:10px;">
+        Nəticəni gör
+      </button>
+      <div id="testResult" class="test-result"></div>
+    </div>
+
+    <div class="strength">
+      <h2>Mesajın gücü</h2>
+      <p class="helper">
+        Buraya şifrələnmiş və ya adi bir mesaj yazın – alət onu uzunluq, dinamika və açar sözlərə görə
+        təxmini emosional güc baxımından qiymətləndirəcək.
+      </p>
+      <div class="strength-row">
+        <input
+          id="strengthInput"
+          type="text"
+          placeholder="Məsələn: Ədalət uğrunda susmaq olmaz..."
+        />
+        <button id="strengthBtn" type="button" class="secondary">Qiymətləndir</button>
+      </div>
+      <div id="strengthResult" class="strength-result"></div>
+    </div>
+
     <div class="about">
       <strong>Bu alət “Hüquq nədir?” kitabının oxucuları üçün hazırlanıb.</strong>
       Məqsəd yalnız qaydaları əzbərlətmək deyil, hüququ insanın daxili ədalət hissi və düşüncə prosesi
@@ -553,6 +732,14 @@
       “Hüququ seçməyimin əsl səbəbi nədir?”
       <br />
       <span class="motto">“Həqiqət təvazökar qəlblərə sızar...”</span>
+    </div>
+
+    <!-- Motivasiya overlayi -->
+    <div id="motOverlay" class="mot-overlay">
+      <div class="mot-inner">
+        <div class="mot-title">Mesaj açıldı</div>
+        <div class="mot-quote">“Həqiqət təvazökar qəlblərə sızar...”</div>
+      </div>
     </div>
   </div>
 
@@ -700,6 +887,16 @@
     const secretHintEl = document.getElementById("secretHint");
     const puzzleGridEl = document.getElementById("puzzleGrid");
 
+    const testQuestionsEl = document.getElementById("testQuestions");
+    const testEvalBtn = document.getElementById("testEvalBtn");
+    const testResultEl = document.getElementById("testResult");
+
+    const strengthInput = document.getElementById("strengthInput");
+    const strengthBtn = document.getElementById("strengthBtn");
+    const strengthResultEl = document.getElementById("strengthResult");
+
+    const motOverlay = document.getElementById("motOverlay");
+
     // Substitution üçün defolt – tərsinə əlifba
     const defaultSubstUpper = [...AZ_UPPER].reverse().join("");
     const defaultSubstLower = [...AZ_LOWER].reverse().join("");
@@ -719,6 +916,13 @@
         vigenereRow.style.display = "block";
       }
     });
+
+    function showMotOverlay() {
+      motOverlay.classList.add("show");
+      setTimeout(() => {
+        motOverlay.classList.remove("show");
+      }, 1600);
+    }
 
     function runCipher(mode) {
       const method = methodSelect.value;
@@ -760,6 +964,10 @@
       }
 
       outputBox.textContent = result;
+
+      if (mode === "decrypt" && result.trim()) {
+        showMotOverlay();
+      }
     }
 
     encryptBtn.addEventListener("click", () => runCipher("encrypt"));
@@ -848,7 +1056,7 @@
       secretCipherEl.textContent = cipher;
     }
 
-    // Hüquqi tapmacalar – şifrəli söz + ipucu (cavab UI-da göstərilmir)
+    // Hüquqi tapmacalar – şifrəli söz + ipucu
     const puzzles = [
       {
         cipher: caesarAz("QANUN", 5),
@@ -886,9 +1094,201 @@
       });
     }
 
-    // İlk yükləmədə
-    prepareSecret();
-    renderPuzzles();
+    // İdrak testi – 5 sual, hər cavab bir xüsusiyyəti gücləndirir
+    const testData = [
+      {
+        text: "1. Hüquqa gəlmək motivasiyanız daha çox nəyə bağlıdır?",
+        options: [
+          { label: "Ədalətin bərpasında rol oynamaq istəyirəm.", trait: "justice" },
+          { label: "Məntiqi məsələləri həll etməyi sevirəm.", trait: "analysis" },
+          { label: "Güclü və sabit karyera qurmaq istəyirəm.", trait: "pragmatic" },
+          { label: "İnsana və cəmiyyətə daha yaxın olmaq istəyirəm.", trait: "human" }
+        ]
+      },
+      {
+        text: "2. Çətin qərar qarşısında ilk nə edirsiniz?",
+        options: [
+          { label: "“Bu qərar ədalətlidirmi?” sualını verirəm.", trait: "justice" },
+          { label: "Variantları müqayisə edib, məsafədən baxmağa çalışıram.", trait: "analysis" },
+          { label: "Riskləri və nəticələri praktiki tərəfdən hesablayıram.", trait: "pragmatic" },
+          { label: "Əvvəlcə kimin necə təsirlənəcəyini düşünürəm.", trait: "human" }
+        ]
+      },
+      {
+        text: "3. Hüquq nəzəriyyəsi dərslərində sizi daha çox nə cəlb edir?",
+        options: [
+          { label: "Ədalət və insan ləyaqəti ilə bağlı fəlsəfi suallar.", trait: "justice" },
+          { label: "Müxtəlif nəzəriyyələrin müqayisəli təhlili.", trait: "analysis" },
+          { label: "Qanunların real həyatda necə işləməsi.", trait: "pragmatic" },
+          { label: "Hüququn insan psixologiyasına təsiri.", trait: "human" }
+        ]
+      },
+      {
+        text: "4. Hüquqşünas obrazını necə görürsünüz?",
+        options: [
+          { label: "Zülmə qarşı duran vicdan səsi kimi.", trait: "justice" },
+          { label: "Düşünülmüş arqumentlər quran analitik beyin kimi.", trait: "analysis" },
+          { label: "Problemləri həll edən peşəkar strateg kimi.", trait: "pragmatic" },
+          { label: "İnsanın hekayəsini dinləyən həssas müşahidəçi kimi.", trait: "human" }
+        ]
+      },
+      {
+        text: "5. Gələcəkdə hansısa hüquqi sahədə özünüzü daha rahat təsəvvür edirsiniz?",
+        options: [
+          { label: "İnsan hüquqları, konstitusiya hüququ.", trait: "justice" },
+          { label: "Akademik hüquq, hüquq nəzəriyyəsi, tədqiqat.", trait: "analysis" },
+          { label: "İşgüzar hüquq, müqavilələr, korporativ hüquq.", trait: "pragmatic" },
+          { label: "Ailə hüququ, media­siya, sosial sahələr.", trait: "human" }
+        ]
+      }
+    ];
+
+    function renderTestQuestions() {
+      testQuestionsEl.innerHTML = "";
+      testData.forEach((q, qi) => {
+        const block = document.createElement("div");
+        block.className = "test-question";
+        const optsHtml = q.options
+          .map(
+            (opt, oi) => `
+            <label class="test-option">
+              <input type="radio" name="q${qi}" value="${opt.trait}">
+              <span>${opt.label}</span>
+            </label>
+          `
+          )
+          .join("");
+        block.innerHTML = `
+          <div class="test-question-title">${q.text}</div>
+          <div class="test-options">${optsHtml}</div>
+        `;
+        testQuestionsEl.appendChild(block);
+      });
+    }
+
+    function evaluateTest() {
+      const scores = { justice: 0, analysis: 0, pragmatic: 0, human: 0 };
+      let answered = 0;
+
+      testData.forEach((_, qi) => {
+        const checked = document.querySelector(`input[name="q${qi}"]:checked`);
+        if (checked) {
+          const trait = checked.value;
+          scores[trait] = (scores[trait] || 0) + 1;
+          answered++;
+        }
+      });
+
+      if (answered < testData.length) {
+        alert("Zəhmət olmasa bütün suallara cavab verin.");
+        return;
+      }
+
+      let bestTrait = "justice";
+      let bestScore = -1;
+      for (const [k, v] of Object.entries(scores)) {
+        if (v > bestScore) {
+          bestScore = v;
+          bestTrait = k;
+        }
+      }
+
+      let msg = "";
+      if (bestTrait === "justice") {
+        msg =
+          "Siz daha çox ədalət yönümlü hüquqşünassınız. Sizin üçün hüquq ilk növbədə vicdan, haqsızlıqla mübarizə və insan ləyaqətinin qorunması deməkdir.";
+      } else if (bestTrait === "analysis") {
+        msg =
+          "Sizin güclü tərəfiniz analitik düşüncədir. Hüququ məntiqi sistem kimi görür, arqument qurmağı və nəzəri müzakirələri sevirsiniz.";
+      } else if (bestTrait === "pragmatic") {
+        msg =
+          "Siz praktik yönümlü hüquqşünassınız. Hüququ real problemlərin həlli, strategiya və qərarvermə aləti kimi dəyərləndirirsiniz.";
+      } else {
+        msg =
+          "Siz insan yönümlü hüquqşünassınız. Hüququ insan hekayələri, empatiya və sosial həssaslıq prizmasından görürsünüz.";
+      }
+
+      testResultEl.textContent = msg;
+      testResultEl.style.display = "block";
+    }
+
+    testEvalBtn.addEventListener("click", evaluateTest);
+
+    // Mesajın gücü – sadə emosional skor
+    function evaluateStrength(text) {
+      if (!text.trim()) return null;
+      const t = text.trim();
+      let score = 10;
+
+      const len = t.length;
+      score += Math.min(40, len * 1.2);
+
+      const uniqChars = new Set(t.replace(/\s+/g, "").toLowerCase());
+      score += Math.min(20, uniqChars.size * 1.5);
+
+      if (/[!]/.test(t)) score += 8;
+      if (/[?]/.test(t)) score += 4;
+      if (/[A-ZƏÖÜĞŞÇ]/.test(t)) score += 4;
+
+      const lower = t.toLowerCase();
+      const strongWords = ["ədalət", "azadlıq", "vicdan", "hüquq", "insan", "missiya", "ümid"];
+      let keywordHit = false;
+      strongWords.forEach((w) => {
+        if (lower.includes(w)) {
+          score += 7;
+          keywordHit = true;
+        }
+      });
+
+      score = Math.max(0, Math.min(100, Math.round(score)));
+
+      let label = "";
+      let desc = "";
+      if (score >= 75) {
+        label = "Yüksək emosional güc";
+        desc =
+          "Bu mesaj oxucunu hərəkətə gətirə, dəyərlərə toxuna və motivasiya yarada biləcək güclü emosional yüklənməyə malikdir.";
+      } else if (score >= 50) {
+        label = "Orta – düşüncəyə yönəlik mesaj";
+        desc =
+          "Bu mesaj daha çox düşünməyi, analiz etməyi tələb edən, sakit, lakin mənalı vurğuya malikdir.";
+      } else {
+        label = "Sakit və analitik ton";
+        desc =
+          "Bu mesaj emosional partlayışdan çox, məntiqi və məlumatverici təsir üçün uyğundur.";
+      }
+
+      if (keywordHit) {
+        desc +=
+          " Xüsusilə ədalət, insan və hüquqla bağlı açar sözlər mesajın dəyər yönümlü təsirini gücləndirir.";
+      }
+
+      return { score, label, desc };
+    }
+
+    strengthBtn.addEventListener("click", () => {
+      const text = strengthInput.value || "";
+      const res = evaluateStrength(text);
+      if (!res) {
+        strengthResultEl.style.display = "none";
+        return;
+      }
+      strengthResultEl.innerHTML = `
+        <div><span class="strength-score">${res.score}/100</span> – ${res.label}</div>
+        <div class="helper" style="margin-top:4px;">${res.desc}</div>
+      `;
+      strengthResultEl.style.display = "block";
+    });
+
+    // İlk yükləmədə data
+    function init() {
+      setTheme("golden");
+      prepareSecret();
+      renderPuzzles();
+      renderTestQuestions();
+    }
+
+    init();
   </script>
 </body>
 </html>
