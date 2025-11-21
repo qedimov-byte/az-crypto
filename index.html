@@ -604,8 +604,8 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;              
-  opacity: 0.08;                         
-  filter: blur(0.3px);                   
+  opacity: 0.22;            /* 0.08 → 0.22 (fon daha görünən) */ 
+  filter: blur(1px);         /* fonu yumşaq göstərir */                  
   pointer-events: none;                  
   z-index: 0;
 }
@@ -617,6 +617,12 @@ body {
 .card {
   position: relative;
   z-index: 1;
+
+  /* Kartı bir az daha açıq və şəffaf edir */
+  background: rgba(20, 30, 60, 0.35);  /* açıq şüşə effekti */
+  backdrop-filter: blur(14px);         /* glassmorphism */
+  border-top: 1px solid rgba(244, 193, 92, 0.25);
+  border-bottom: 1px solid rgba(244, 193, 92, 0.25);
 }
   
   </style>
@@ -1634,6 +1640,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
