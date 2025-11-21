@@ -625,7 +625,24 @@ body {
   border-top: 1px solid rgba(244, 193, 92, 0.25);
   border-bottom: 1px solid rgba(244, 193, 92, 0.25);
 }
-  
+  .motto-wrapper {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.motto {
+  margin-top: 6px;
+  font-size: 1.25rem;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  color: var(--text-main);
+  opacity: 0.98;
+
+  text-shadow:
+    0 0 6px rgba(244,193,92,0.25),
+    0 0 12px rgba(244,193,92,0.25);
+}
   </style>
 </head>
 <body class="theme-golden">
@@ -650,10 +667,9 @@ body {
     />
   </div>
   
-  <div style="text-align:center; margin-top:12px;">
-  
-  <div class="motto" style="margin-top:6px; font-size:1rem; font-style:italic; opacity:0.95;">
-    Hüququ seçməzdən əvvəl – özünüzü tanıyın ... 
+  <div class="motto-wrapper">
+  <div class="motto">
+    Hüququ seçməzdən əvvəl – özünüzü tanıyın ...
   </div>
 </div>
 
@@ -1639,6 +1655,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
