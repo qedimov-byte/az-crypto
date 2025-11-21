@@ -5,7 +5,6 @@
   <title>Hüquq nədir? · Kripto lab</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* ========= TEMA DƏYİŞƏN RƏNGLƏR (DEFAULT: GOLDEN JUSTICE) ========= */
     :root {
       --bg: #0b1536;
       --bg-card: #101b46;
@@ -13,8 +12,8 @@
       --text-sub: #e5e7eb;
       --border: #273260;
       --border-soft: #1f2a4d;
-      --accent1: #f4c15c; /* qızılı */
-      --accent2: #f97316; /* isti narıncı-qızılı */
+      --accent1: #f4c15c;
+      --accent2: #f97316;
       --badge-bg: linear-gradient(135deg, rgba(244, 193, 92, 0.35), rgba(248, 250, 252, 0.05));
       --badge-text: #0f172a;
       --area-bg: rgba(15, 23, 42, 0.65);
@@ -28,7 +27,6 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* 📘 Blue Constitution – sakit mavi, rəsmi stil */
     body.theme-blue {
       --bg: #0b1728;
       --bg-card: #0f172a;
@@ -50,7 +48,6 @@
       color-scheme: dark;
     }
 
-    /* ⚖️ Dark Courtroom – qara + qızılı dramatik */
     body.theme-courtroom {
       --bg: #02010a;
       --bg-card: #050816;
@@ -497,7 +494,6 @@
       color: var(--text-main);
     }
 
-    /* Motivasiya overlay – glowing animation */
     .mot-overlay {
       position: absolute;
       inset: 0;
@@ -584,8 +580,8 @@
 
     <h1>Hüquq nədir? · Kripto lab</h1>
     <p class="subtitle">
-      Sezar, Atbash, Vigenère və Substitution şifrələri ilə hüququ bir az da oyun kimi kəşf edin.
-      Qaydaları oxuyarkən düşüncəni də şifrələyin.
+      Sezar, Atbash, Vigenère, Substitution və hüquqi simvol şifrələri ilə hüququ bir az da oyun kimi
+      kəşf edin. Qaydaları oxuyarkən düşüncəni də şifrələyin.
     </p>
 
     <label for="inputText">Mətn</label>
@@ -603,9 +599,11 @@
           <option value="atbash">Atbash (əlifbanı tərsinə çevir)</option>
           <option value="substitution">Substitution (əlifbanı əvəz etmə)</option>
           <option value="reverse">Reverse (mətni tərsinə yaz)</option>
+          <option value="symbols">Hüquqi simvollar (⚖ ⚔ 📜 🧠 ❤️)</option>
         </select>
         <div class="helper">
-          Sezar və Vigenère üçün açar lazımdır. Atbash və Reverse açarsız işləyir.
+          Sezar və Vigenère üçün açar lazımdır. Atbash və Reverse açarsız işləyir. Hüquqi simvollar
+          metodu isə vizual, yalnız şifrələmə üçündür.
         </div>
       </div>
 
@@ -627,7 +625,7 @@
         <input
           id="vKey"
           type="text"
-          placeholder="Məsələn: EDALIET, HUQUQ, MISSIYA..."
+          placeholder="Məsələn: EDALET, HUQUQ, MISSIYA..."
         />
         <div class="helper">
           Açar sözü yalnız Azərbaycan əlifbasındakı hərflərlə yazın. Şifrələmə və açma üçün eyni açar
@@ -636,7 +634,7 @@
       </div>
     </div>
 
-    <div class="row" id="substitutionRow" style="display: none;">
+    <div class="row" id="substitutionRow" style="display:none;">
       <div class="col">
         <label for="substAlphabet">Substitution əlifbası</label>
         <input
@@ -668,13 +666,13 @@
         A B C Ç D E Ə F G Ğ H X I İ J K Q L M N O Ö P R S Ş T U Ü V Y Z
       </div>
       <div class="helper">
-        Digər simvollar (boşluq, rəqəmlər, nöqtə və s.) olduğu kimi saxlanılır.
-        Substitution üçün 32 hərf uzunluğunda əlifba yazmağınız lazımdır.
+        Digər simvollar (boşluq, rəqəmlər, nöqtə və s.) olduğu kimi saxlanılır. Substitution üçün 32
+        hərf uzunluğunda əlifba yazmağınız lazımdır.
       </div>
     </div>
 
     <div class="secret">
-      <h2>Müəllifdən gizli mesaj</h2>
+      <h2>Müəllifdən gizli mesaj · 1-ci səviyyə</h2>
       <p class="helper">
         Aşağıdakı cümlə Vigenère və ya Sezar şifrəsi ilə kodlaşdırılıb. İstəsəniz, yuxarıdakı alətlə
         özünüz açmağa cəhd edin – ipucu yalnız istiqamət verir.
@@ -683,6 +681,78 @@
         <div class="secret-label">ŞİFRƏLİ MƏTN</div>
         <div id="secretCipher" class="secret-text"></div>
         <div id="secretHint" class="helper small"></div>
+      </div>
+
+      <button
+        id="unlockLevel2Btn"
+        type="button"
+        class="secondary"
+        style="margin-top:10px; display:none;"
+      >
+        Sıradakı mesajı açmaq üçün 3 tapmaca həll et
+      </button>
+
+      <div id="level2Wrapper" style="display:none; margin-top:14px;">
+        <div class="secret-label">2-ci səviyyə · mini tapmacalar</div>
+        <div class="helper small">
+          Aşağıdakı 3 sualın cavabını qısa sözlə yazmağa çalış. Sonra “Cavabları yoxla və mesajı
+          göstər” düyməsini sıx.
+        </div>
+
+        <div class="test-question" style="margin-top:8px;">
+          <div class="test-question-title">
+            1. Hüququn ən dərin məqsədi hansı bir sözlə ifadə olunur?
+          </div>
+          <input
+            id="r1"
+            type="text"
+            placeholder="Bir söz – məsələn, '...'"
+            style="margin-top:4px; width:100%;"
+          />
+        </div>
+
+        <div class="test-question">
+          <div class="test-question-title">
+            2. Hüquqi qaydaların əsas yazılı mənbə forması necə adlanır?
+          </div>
+          <input
+            id="r2"
+            type="text"
+            placeholder="Bir söz – məsələn, '...'"
+            style="margin-top:4px; width:100%;"
+          />
+        </div>
+
+        <div class="test-question">
+          <div class="test-question-title">
+            3. “Hüquq nədir?” kitabında hüququn sənin bacarıqların və dünyanın ehtiyacları ilə
+            kəsişdiyi nöqtə hansı sözlə təsvir olunur?
+          </div>
+          <input
+            id="r3"
+            type="text"
+            placeholder="Bir söz – məsələn, '...'"
+            style="margin-top:4px; width:100%;"
+          />
+        </div>
+
+        <button
+          id="showSecondSecretBtn"
+          type="button"
+          class="secondary"
+          style="margin-top:8px;"
+        >
+          Cavabları yoxla və mesajı göstər
+        </button>
+
+        <div
+          id="secondSecretBox"
+          class="secret-box"
+          style="display:none; margin-top:10px;"
+        >
+          <div class="secret-label">MÜƏLLİFDƏN XÜSUSİ MESAJ</div>
+          <div id="secondSecretText" class="secret-text"></div>
+        </div>
       </div>
     </div>
 
@@ -734,7 +804,6 @@
       <span class="motto">“Həqiqət təvazökar qəlblərə sızar...”</span>
     </div>
 
-    <!-- Motivasiya overlayi -->
     <div id="motOverlay" class="mot-overlay">
       <div class="mot-inner">
         <div class="mot-title">Mesaj açıldı</div>
@@ -747,6 +816,40 @@
     const AZ_UPPER = "ABCÇDEƏFGĞHXIİJKQLMNOÖPRSŞTUÜVYZ";
     const AZ_LOWER = "abcçdeəfgğhxıijkqlmnoöprsştuüvyz";
     const ALPH_LEN = AZ_UPPER.length;
+
+    const SYMBOLS = ["⚖", "⚔", "📜", "🧠", "❤️"];
+    const symbolCombos = [];
+    for (let i = 0; i < SYMBOLS.length; i++) {
+      for (let j = 0; j < SYMBOLS.length; j++) {
+        for (let k = 0; k < SYMBOLS.length; k++) {
+          if (symbolCombos.length < ALPH_LEN) {
+            symbolCombos.push(SYMBOLS[i] + SYMBOLS[j] + SYMBOLS[k]);
+          }
+        }
+      }
+    }
+    const symbolMapEncode = {};
+    for (let i = 0; i < ALPH_LEN; i++) {
+      const combo = symbolCombos[i];
+      symbolMapEncode[AZ_UPPER[i]] = combo;
+      symbolMapEncode[AZ_LOWER[i]] = combo;
+    }
+
+    function symbolEncode(text) {
+      const tokens = [];
+      for (const ch of text) {
+        const uIdx = AZ_UPPER.indexOf(ch);
+        const lIdx = AZ_LOWER.indexOf(ch);
+        if (uIdx !== -1 || lIdx !== -1) {
+          tokens.push(symbolMapEncode[ch]);
+        } else if (ch === " ") {
+          tokens.push("/");
+        } else {
+          tokens.push(ch);
+        }
+      }
+      return tokens.join(" ");
+    }
 
     function normalizeShift(shift) {
       return ((shift % ALPH_LEN) + ALPH_LEN) % ALPH_LEN;
@@ -863,7 +966,6 @@
       return [...text].reverse().join("");
     }
 
-    // UI elementləri
     const inputText = document.getElementById("inputText");
     const methodSelect = document.getElementById("method");
     const shiftCol = document.getElementById("shiftCol");
@@ -887,6 +989,12 @@
     const secretHintEl = document.getElementById("secretHint");
     const puzzleGridEl = document.getElementById("puzzleGrid");
 
+    const unlockLevel2Btn = document.getElementById("unlockLevel2Btn");
+    const level2Wrapper = document.getElementById("level2Wrapper");
+    const showSecondSecretBtn = document.getElementById("showSecondSecretBtn");
+    const secondSecretBox = document.getElementById("secondSecretBox");
+    const secondSecretText = document.getElementById("secondSecretText");
+
     const testQuestionsEl = document.getElementById("testQuestions");
     const testEvalBtn = document.getElementById("testEvalBtn");
     const testResultEl = document.getElementById("testResult");
@@ -897,7 +1005,6 @@
 
     const motOverlay = document.getElementById("motOverlay");
 
-    // Substitution üçün defolt – tərsinə əlifba
     const defaultSubstUpper = [...AZ_UPPER].reverse().join("");
     const defaultSubstLower = [...AZ_LOWER].reverse().join("");
     substAlphabetInput.value = defaultSubstUpper;
@@ -919,6 +1026,7 @@
 
     function showMotOverlay() {
       motOverlay.classList.add("show");
+      unlockLevel2Btn.style.display = "inline-flex";
       setTimeout(() => {
         motOverlay.classList.remove("show");
       }, 1600);
@@ -961,6 +1069,13 @@
         }
         const decrypt = mode === "decrypt";
         result = vigenereAz(text, key, decrypt);
+      } else if (method === "symbols") {
+        if (mode === "encrypt") {
+          result = symbolEncode(text);
+        } else {
+          result =
+            "Bu hüquqi simvol şifrəsi vizual eksperimentdir və yalnız şifrələmə üçün nəzərdə tutulub. Deşifrə – müəlliflə birlikdə davam edən oyun mərhələsidir 🙂";
+        }
       }
 
       outputBox.textContent = result;
@@ -995,7 +1110,6 @@
       shiftInput.value = r;
     });
 
-    // Tema seçimi
     function setTheme(theme) {
       document.body.classList.remove("theme-golden", "theme-blue", "theme-courtroom");
       if (theme === "blue") {
@@ -1018,7 +1132,6 @@
     themeBlueBtn.addEventListener("click", () => setTheme("blue"));
     themeCourtBtn.addEventListener("click", () => setTheme("court"));
 
-    // Müəllifdən gizli mesaj – yalnız şifrəli mətn + ipucu
     const secretMessages = [
       {
         type: "vigenere",
@@ -1056,7 +1169,6 @@
       secretCipherEl.textContent = cipher;
     }
 
-    // Hüquqi tapmacalar – şifrəli söz + ipucu
     const puzzles = [
       {
         cipher: caesarAz("QANUN", 5),
@@ -1094,7 +1206,6 @@
       });
     }
 
-    // İdrak testi – 5 sual, hər cavab bir xüsusiyyəti gücləndirir
     const testData = [
       {
         text: "1. Hüquqa gəlmək motivasiyanız daha çox nəyə bağlıdır?",
@@ -1138,7 +1249,7 @@
           { label: "İnsan hüquqları, konstitusiya hüququ.", trait: "justice" },
           { label: "Akademik hüquq, hüquq nəzəriyyəsi, tədqiqat.", trait: "analysis" },
           { label: "İşgüzar hüquq, müqavilələr, korporativ hüquq.", trait: "pragmatic" },
-          { label: "Ailə hüququ, media­siya, sosial sahələr.", trait: "human" }
+          { label: "Ailə hüququ, mediasiya, sosial sahələr.", trait: "human" }
         ]
       }
     ];
@@ -1214,7 +1325,6 @@
 
     testEvalBtn.addEventListener("click", evaluateTest);
 
-    // Mesajın gücü – sadə emosional skor
     function evaluateStrength(text) {
       if (!text.trim()) return null;
       const t = text.trim();
@@ -1280,7 +1390,30 @@
       strengthResultEl.style.display = "block";
     });
 
-    // İlk yükləmədə data
+    unlockLevel2Btn.addEventListener("click", () => {
+      level2Wrapper.style.display = "block";
+    });
+
+    showSecondSecretBtn.addEventListener("click", () => {
+      const a1 = (document.getElementById("r1").value || "").trim().toLowerCase();
+      const a2 = (document.getElementById("r2").value || "").trim().toLowerCase();
+      const a3 = (document.getElementById("r3").value || "").trim().toLowerCase();
+
+      let score = 0;
+      if (["ədalət", "adalet"].includes(a1)) score++;
+      if (["qanun"].includes(a2)) score++;
+      if (["missiya", "missiya"].includes(a3)) score++;
+
+      if (score < 2) {
+        alert("Heç olmasa 2 cavab uyğun olmalıdır. Bir az da fikirləş və yenidən yoxla.");
+        return;
+      }
+
+      secondSecretText.textContent =
+        "Əgər buraya qədər gəlibsənsə, demək, həm oyun oynamağı, həm də dərin suallar verməyi sevirsən. Hüquq sənin üçün yalnız ixtisas yox, uzun bir daxili yol ola bilər. Bu yolda ən güclü kompasiya – sənin vicdanın və həqiqətə sadiqliyindir.";
+      secondSecretBox.style.display = "block";
+    });
+
     function init() {
       setTheme("golden");
       prepareSecret();
