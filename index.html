@@ -336,7 +336,7 @@
       padding: 10px 12px;
       border-radius: 14px;
       border: 1px solid rgba(244, 193, 92, 0.4);
-      background: radial-gradient(circle at top left, rgba(244, 193, 92, 0.18), transparent);
+      background: transparent !important;
     }
 
     .secret-label {
@@ -604,9 +604,9 @@
   inset: 0;
   background-image: url("huquq-nedir-cover.png");
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain; /* Şəkil kəsilmədən tam görünür */
-  opacity: 0.18;            /* fon daha çox görünür */
+  background-position: center top;
+  background-size: contain;  
+  opacity: 0.22;   
   filter: none;
   pointer-events: none;
   z-index: 0;
@@ -645,6 +645,16 @@ body {
     0 0 6px rgba(244,193,92,0.25),
     0 0 12px rgba(244,193,92,0.25);
 }
+  .card,
+.container,
+.theme-box,
+textarea,
+select {
+  background: transparent !important;   /* Arxa fonu tam şəffaf edir */
+  backdrop-filter: none !important;     /* Şüşə effekti tam silinir */
+  box-shadow: none !important;          /* Kölgələr ləğv olunur */
+}
+
   </style>
 </head>
 <body class="theme-golden">
@@ -1657,6 +1667,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
