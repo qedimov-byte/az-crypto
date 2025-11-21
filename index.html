@@ -688,6 +688,24 @@ input[type="text"] {
   50% { background-position: 100%; }
   100% { background-position: 0%; }
 }
+/* --- HÜQUQİ TAPMACALAR DİZAYNI --- */
+.puzzle-step {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--chip-bg);
+  border: 1px solid var(--chip-border);
+}
+
+.puzzle-step input {
+  margin-top: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--area-bg);
+  color: var(--text-main);
+}
 
     
   </style>
@@ -929,13 +947,19 @@ input[type="text"] {
 </div>
 
     <div class="puzzles">
-      <h2>Hüquq tapmacaları</h2>
-      <p class="helper">
-        Aşağıdakı kartlarda gizli hüquqi anlayışlar şifrələnib. Şifrəli sözü və ipucunu istifadə edərək,
-        hansı hüquqi anlayış olduğunu tapmağa çalışın.
-      </p>
-      <div id="puzzleGrid" class="puzzle-grid"></div>
-    </div>
+  <h2>Hüquq tapmacaları (ardıcıl səviyyələr)</h2>
+  <p class="helper">
+    Hər tapmacanın cavabını düzgün yazdıqda növbəti səviyyə açılacaq.
+  </p>
+
+  <div id="puzzleSteps"></div>
+
+  <div id="finalPuzzleBox" class="secret-box" style="display:none; margin-top:14px;">
+    <div class="secret-label">GİZLİ SÖZ</div>
+    <div id="finalPuzzleWord" class="secret-text"></div>
+  </div>
+</div>
+
 
     <div class="tests">
       <h2>“Hüquq nədir?” üzrə idrak testi</h2>
@@ -1694,9 +1718,73 @@ input[type="text"] {
     }
 
     init();
+    // ——————— TAPMACA SİSTEMİ ———————
+
+// Səviyyələr ardıcıldır — cavab düz olduqca növbətisi açılır
+const puzzleLevels = [
+  { question: "QANUN (Sezar +5 ilə şifrələnib)", answer: "qanun", cipher: caesarAz("QANUN", 5) },
+  { question: "EDALET (Vigenère ilə HUQUQ açarı)", answer: "ədalət", cipher: vigenereAz("EDALET", "HUQUQ") },
+  { question: "HUQUQ (Atbash ilə)", answer: "hüquq", cipher: atbashAz("HUQUQ") },
+  { question: "MESULIYYET (Sezar +9)", answer: "məsuliyyət", cipher: caesarAz("MESULIYYET", 9) },
+  { question: "AZADLIQ (Vigenère, açar=INSAN)", answer: "azadlıq", cipher: vigenereAz("AZADLIQ", "INSAN") }
+];
+
+// Final söz
+const finalPuzzleWord = "VİCDAN";
+
+function renderPuzzleSteps() {
+  const wrapper = document.getElementById("puzzleSteps");
+  wrapper.innerHTML = "";
+
+  puzzleLevels.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "puzzle-step";
+    div.id = "step" + i;
+    div.style.display = i === 0 ? "block" : "none";
+
+    div.innerHTML = `
+      <div class="puzzle-title"><strong>Tapmaca ${i + 1}</strong></div>
+      <div class="puzzle-cipher">Şifrəli mətn: ${p.cipher}</div>
+      <div class="helper small">${p.question}</div>
+      <input type="text" id="answer${i}" placeholder="Cavabı yaz..." />
+      <button type="button" class="secondary" onclick="checkPuzzle(${i})" style="margin-top:6px;">
+        Yoxla
+      </button>
+    `;
+
+    wrapper.appendChild(div);
+  });
+}
+
+function checkPuzzle(i) {
+  const val = document.getElementById("answer" + i).value.trim().toLowerCase();
+  const correct = puzzleLevels[i].answer.toLowerCase();
+
+  if (val === correct) {
+    alert("Düzdür! 🎉");
+
+    // növbəti səviyyəni aç
+    if (i + 1 < puzzleLevels.length) {
+      document.getElementById("step" + (i + 1)).style.display = "block";
+    } else {
+      // bütün tapmacalar bitdi → final söz
+      document.getElementById("finalPuzzleWord").textContent = finalPuzzleWord;
+      document.getElementById("finalPuzzleBox").style.display = "block";
+    }
+  } else {
+    alert("Yanlışdır. Yenidən cəhd et!");
+  }
+}
+
+// Load at start
+renderPuzzleSteps();
+
+
+    
   </script>
 </body>
 </html>
+
 
 
 
