@@ -596,19 +596,22 @@
         justify-content: flex-start;
       }
     }
-  
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("/mnt/data/A_book_cover_in_Azerbaijani_language_by_Əli_Qədimo.png");
-  background-size: contain;         
-  background-repeat: no-repeat;       
-  background-position: center;        
-  opacity: 0.08;                     
-  filter: blur(0.4px);                
-  pointer-events: none;               
+ 
+.page-bg-cover {
+  position: fixed;
+  inset: 0;                             
+  background-image: url("huquq-nedir-cover.png");  
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;              
+  opacity: 0.08;                         
+  filter: blur(0.3px);                   
+  pointer-events: none;                  
   z-index: 0;
+}
+
+body {
+  position: relative;
 }
 
 .card {
@@ -619,7 +622,25 @@
   </style>
 </head>
 <body class="theme-golden">
-   
+     <div class="page-bg-cover"></div>
+  
+  <div style="
+      width: 100%;
+      padding-top: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  ">
+    <img
+      src="logo.png"
+      alt="The Legal Beacon"
+      style="
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 14px rgba(244, 193, 92, 0.85));
+      "
+    />
   <div style="
       width: 100%;
       padding-top: 25px;
@@ -1630,6 +1651,7 @@
   </script>
 </body>
 </html>
+
 
 
 
