@@ -1776,11 +1776,31 @@ function checkStepPuzzle(stepId) {
 
 // Səviyyələr ardıcıldır — cavab düz olduqca növbətisi açılır
 const puzzleLevels = [
-  { question: "QANUN (Sezar +5 ilə şifrələnib)", answer: "qanun", cipher: caesarAz("QANUN", 5) },
-  { question: "EDALET (Vigenère ilə HUQUQ açarı)", answer: "ədalət", cipher: vigenereAz("EDALET", "HUQUQ") },
-  { question: "HUQUQ (Atbash ilə)", answer: "hüquq", cipher: atbashAz("HUQUQ") },
-  { question: "MESULIYYET (Sezar +9)", answer: "məsuliyyət", cipher: caesarAz("MESULIYYET", 9) },
-  { question: "AZADLIQ (Vigenère, açar=INSAN)", answer: "azadlıq", cipher: vigenereAz("AZADLIQ", "INSAN") }
+  { 
+    question: "Şifrəli mətn (Sezar +5):", 
+    answer: "qanun", 
+    cipher: caesarAz("QANUN", 5) 
+  },
+  { 
+    question: "Şifrəli mətn (Vigenère, açar: HUQUQ):", 
+    answer: "ədalət", 
+    cipher: vigenereAz("ƏDALƏT", "HUQUQ") 
+  },
+  { 
+    question: "Şifrəli mətn (Atbash):", 
+    answer: "hüquq", 
+    cipher: atbashAz("HÜQUQ") 
+  },
+  { 
+    question: "Şifrəli mətn (Sezar +9):", 
+    answer: "məsuliyyət", 
+    cipher: caesarAz("MƏSULİYYƏT", 9) 
+  },
+  { 
+    question: "Şifrəli mətn (Vigenère, açar: INSAN):", 
+    answer: "azadlıq", 
+    cipher: vigenereAz("AZADLIQ", "INSAN") 
+  }
 ];
 
 // Final söz
@@ -1838,6 +1858,7 @@ renderPuzzleSteps();
   </script>
 </body>
 </html>
+
 
 
 
