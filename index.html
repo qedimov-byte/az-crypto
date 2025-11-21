@@ -689,72 +689,97 @@
         class="secondary"
         style="margin-top:10px; display:none;"
       >
-        Sıradakı mesajı açmaq üçün 3 tapmaca həll et
+        Sıradakı mesajı açmaq üçün 5 tapmaca həll et
       </button>
 
-      <div id="level2Wrapper" style="display:none; margin-top:14px;">
-        <div class="secret-label">2-ci səviyyə · mini tapmacalar</div>
-        <div class="helper small">
-          Aşağıdakı 3 sualın cavabını qısa sözlə yazmağa çalış. Sonra “Cavabları yoxla və mesajı
-          göstər” düyməsini sıx.
-        </div>
+     <div id="level2Wrapper" style="display:none; margin-top:14px;">
+  <div class="secret-label">2-ci səviyyə · mini tapmaca imtahanı</div>
+  <div class="helper small">
+    Aşağıdakı suallar “Hüquq nədir?” kitabının ruhuna uyğundur. Hər birinə
+    <strong>bir sözlə</strong> cavab yazmağa çalış. Sonra “Cavabları yoxla və mesajı göstər”
+    düyməsini sıx.
+  </div>
 
-        <div class="test-question" style="margin-top:8px;">
-          <div class="test-question-title">
-            1. Hüququn ən dərin məqsədi hansı bir sözlə ifadə olunur?
-          </div>
-          <input
-            id="r1"
-            type="text"
-            placeholder="Bir söz – məsələn, '...'"
-            style="margin-top:4px; width:100%;"
-          />
-        </div>
-
-        <div class="test-question">
-          <div class="test-question-title">
-            2. Hüquqi qaydaların əsas yazılı mənbə forması necə adlanır?
-          </div>
-          <input
-            id="r2"
-            type="text"
-            placeholder="Bir söz – məsələn, '...'"
-            style="margin-top:4px; width:100%;"
-          />
-        </div>
-
-        <div class="test-question">
-          <div class="test-question-title">
-            3. “Hüquq nədir?” kitabında hüququn sənin bacarıqların və dünyanın ehtiyacları ilə
-            kəsişdiyi nöqtə hansı sözlə təsvir olunur?
-          </div>
-          <input
-            id="r3"
-            type="text"
-            placeholder="Bir söz – məsələn, '...'"
-            style="margin-top:4px; width:100%;"
-          />
-        </div>
-
-        <button
-          id="showSecondSecretBtn"
-          type="button"
-          class="secondary"
-          style="margin-top:8px;"
-        >
-          Cavabları yoxla və mesajı göstər
-        </button>
-
-        <div
-          id="secondSecretBox"
-          class="secret-box"
-          style="display:none; margin-top:10px;"
-        >
-          <div class="secret-label">MÜƏLLİFDƏN XÜSUSİ MESAJ</div>
-          <div id="secondSecretText" class="secret-text"></div>
-        </div>
-      </div>
+  <div class="test-question" style="margin-top:8px;">
+    <div class="test-question-title">
+      1. Hüququn ən dərin məqsədi hansı bir sözlə ifadə olunur?
     </div>
+    <input
+      id="r1"
+      type="text"
+      placeholder="Bir söz – məsələn, '...'"
+      style="margin-top:4px; width:100%;"
+    />
+  </div>
+
+  <div class="test-question">
+    <div class="test-question-title">
+      2. Dövlət quruluşu baxımından hüququn ali yazılı mənbəyi necə adlanır?
+    </div>
+    <input
+      id="r2"
+      type="text"
+      placeholder="Bir söz – məsələn, '...'"
+      style="margin-top:4px; width:100%;"
+    />
+  </div>
+
+  <div class="test-question">
+    <div class="test-question-title">
+      3. “Lex iniusta non est lex” prinsipi daha çox hansı hüquqi yanaşma ilə bağlıdır?
+    </div>
+    <input
+      id="r3"
+      type="text"
+      placeholder="Bir söz – nəzəri məktəbin adı"
+      style="margin-top:4px; width:100%;"
+    />
+  </div>
+
+  <div class="test-question">
+    <div class="test-question-title">
+      4. Hüquqşünas üçün ən təhlükəli daxili risk: bilik yoxluğu yox, gündəlik haqsızlığa
+      öyrəşməkdir. Bu, bir sözlə nədir?
+    </div>
+    <input
+      id="r4"
+      type="text"
+      placeholder="Bir söz – emosional vəziyyət"
+      style="margin-top:4px; width:100%;"
+    />
+  </div>
+
+  <div class="test-question">
+    <div class="test-question-title">
+      5. Kitabda hüququ sənin bacarıqlarınla dünyanın ehtiyaclarının kəsişdiyi nöqtə kimi
+      izah edən əsas söz hansıdır?
+    </div>
+    <input
+      id="r5"
+      type="text"
+      placeholder="Bir söz – istiqamət / çağırış"
+      style="margin-top:4px; width:100%;"
+    />
+  </div>
+
+  <button
+    id="showSecondSecretBtn"
+    type="button"
+    class="secondary"
+    style="margin-top:8px;"
+  >
+    Cavabları yoxla və mesajı göstər
+  </button>
+
+  <div
+    id="secondSecretBox"
+    class="secret-box"
+    style="display:none; margin-top:10px;"
+  >
+    <div class="secret-label">MÜƏLLİFDƏN XÜSUSİ MESAJ</div>
+    <div id="secondSecretText" class="secret-text"></div>
+  </div>
+</div>
 
     <div class="puzzles">
       <h2>Hüquqi tapmacalar</h2>
@@ -1395,24 +1420,57 @@
     });
 
     showSecondSecretBtn.addEventListener("click", () => {
-      const a1 = (document.getElementById("r1").value || "").trim().toLowerCase();
-      const a2 = (document.getElementById("r2").value || "").trim().toLowerCase();
-      const a3 = (document.getElementById("r3").value || "").trim().toLowerCase();
+  const norm = (v) => (v || "").trim().toLowerCase();
 
-      let score = 0;
-      if (["ədalət", "adalet"].includes(a1)) score++;
-      if (["qanun"].includes(a2)) score++;
-      if (["missiya", "missiya"].includes(a3)) score++;
+  const a1 = norm(document.getElementById("r1").value);
+  const a2 = norm(document.getElementById("r2").value);
+  const a3 = norm(document.getElementById("r3").value);
+  const a4 = norm(document.getElementById("r4").value);
+  const a5 = norm(document.getElementById("r5").value);
 
-      if (score < 2) {
-        alert("Heç olmasa 2 cavab uyğun olmalıdır. Bir az da fikirləş və yenidən yoxla.");
-        return;
-      }
+  let score = 0;
 
-      secondSecretText.textContent =
-        "Əgər buraya qədər gəlibsənsə, demək, həm oyun oynamağı, həm də dərin suallar verməyi sevirsən. Hüquq sənin üçün yalnız ixtisas yox, uzun bir daxili yol ola bilər. Bu yolda ən güclü motivasiya – sənin vicdanın və həqiqətə sadiqliyindir.";
-      secondSecretBox.style.display = "block";
-    });
+  // 1. Hüququn dərin məqsədi → ƏDALƏT
+  if (["ədalət", "adalet"].includes(a1)) score++;
+
+  // 2. Ali yazılı mənbə → KONSTİTUSİYA
+  if (
+    ["konstitusiya", "konstitusya", "konstutisiya"].includes(a2) // kiçik yazı səhvlərinə tolerant
+  ) {
+    score++;
+  }
+
+  // 3. “Lex iniusta non est lex” → TƏBİİ HÜQUQ
+  if (
+    [
+      "təbii hüquq",
+      "tebii huquq",
+      "tebii hüquq",
+      "təbii huquq",
+      "natural law",
+      "natural hukuk"
+    ].includes(a3)
+  ) {
+    score++;
+  }
+
+  // 4. Gündəlik haqsızlığa öyrəşmək → LAQEYDLİK
+  if (["laqeydlik", "laqeydlik"].includes(a4)) score++;
+
+  // 5. Bacarıqlar + dünyanın ehtiyacı → MISSİYA
+  if (["missiya", "missya", "missia"].includes(a5)) score++;
+
+  if (score < 3) {
+    alert(
+      "Ən azı 5 sualdan 3-ü kitabın ruhuna uyğun açılmalıdır. Bir az da düşün, xüsusilə ədalət, konstitusiya, təbii hüquq və missiya sözlərinə fokuslan."
+    );
+    return;
+  }
+
+  secondSecretText.textContent =
+    "Sən artıq “Hüquq nədir?” sualına cavab axtarmağı sadəcə məlumat toplanması kimi yox, daxili axtarış kimi görməyə başlamısan. Hüququ seçərkən yadda saxla: bilik səni peşəkar edər, amma yalnız ədalət hissi və vicdan sənin yolunu hüquqa layiqli edər.";
+  secondSecretBox.style.display = "block";
+});
 
     function init() {
       setTheme("golden");
@@ -1425,4 +1483,5 @@
   </script>
 </body>
 </html>
+
 
