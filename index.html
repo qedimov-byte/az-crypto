@@ -73,27 +73,27 @@
   margin: 0;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;   /* Sətir yox, sütun olsun */
-  align-items: center;      /* Üfüqi mərkəzdə qalsın */
-  /* justify-content: center;  <-- BUNU SİL */
+  flex-direction: column;   
   background: radial-gradient(circle at top, #283771, var(--bg));
   transition: background 0.25s ease;
   color: var(--text-main);
 }
 
     .card {
-      background: radial-gradient(circle at top, rgba(244, 193, 92, 0.06), var(--bg-card));
-      max-width: 980px;
-      width: 100%;
-      margin: 16px;
-      padding: 24px 28px 30px 28px;
-      border-radius: 22px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
-      box-sizing: border-box;
-      border: 1px solid rgba(244, 193, 92, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
+  background: radial-gradient(circle at top, rgba(244, 193, 92, 0.06), var(--bg-card));
+  width: 100%;                    /* Tam ekran */
+  max-width: 100%;                /* Limit yoxdur */
+  margin: 0;                      /* Ortaya sıxmır */
+  padding: 32px 40px;             /* İç boşluq */
+  border-radius: 0;               /* Künclər düz */
+  box-shadow: none;               /* Kölgə olmaya bilər */
+  box-sizing: border-box;
+  border-top: 1px solid rgba(244, 193, 92, 0.2);
+  border-bottom: 1px solid rgba(244, 193, 92, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
 
     h1 {
       margin-top: 8px;
@@ -1651,6 +1651,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
