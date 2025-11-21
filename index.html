@@ -603,9 +603,9 @@
   background-image: url("huquq-nedir-cover.png");  
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;        /* contain → cover (fon daha dolu görünür) */
-  opacity: 0.32;                 /* 0.22 → 0.32 (fon daha aydın) */ 
-  filter: blur(1.2px);           /* yumşaqlığı qoruyur */
+  background-size: contain;              
+  opacity: 0.22;            /* 0.08 → 0.22 (fon daha görünən) */ 
+  filter: blur(1px);         /* fonu yumşaq göstərir */                  
   pointer-events: none;                  
   z-index: 0;
 }
@@ -618,8 +618,9 @@ body {
   position: relative;
   z-index: 1;
 
-  background: rgba(20, 30, 60, 0.30);  /* fon daha çox görünsün deyə 0.35 → 0.30 */
-  backdrop-filter: blur(14px);
+  /* Kartı bir az daha açıq və şəffaf edir */
+  background: rgba(20, 30, 60, 0.35);  /* açıq şüşə effekti */
+  backdrop-filter: blur(14px);         /* glassmorphism */
   border-top: 1px solid rgba(244, 193, 92, 0.25);
   border-bottom: 1px solid rgba(244, 193, 92, 0.25);
 }
@@ -1639,6 +1640,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
