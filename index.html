@@ -5,6 +5,7 @@
   <title>Hüquq nədir? · Kripto lab</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* ========= TEMA DƏYİŞƏN RƏNGLƏR (DEFAULT: GOLDEN JUSTICE) ========= */
     :root {
       --bg: #0b1536;
       --bg-card: #101b46;
@@ -14,10 +15,61 @@
       --border-soft: #1f2a4d;
       --accent1: #f4c15c; /* qızılı */
       --accent2: #f97316; /* isti narıncı-qızılı */
-      --shadow-strong: 0 24px 60px rgba(0, 0, 0, 0.75);
-      --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.7);
+      --badge-bg: linear-gradient(135deg, rgba(244, 193, 92, 0.35), rgba(248, 250, 252, 0.05));
+      --badge-text: #0f172a;
+      --area-bg: rgba(15, 23, 42, 0.65);
+      --output-bg: rgba(15, 23, 42, 0.7);
+      --btn-secondary-bg: rgba(15, 23, 42, 0.7);
+      --btn-secondary-text: #f9fafb;
+      --btn-secondary-shadow: 0 4px 12px rgba(15, 23, 42, 0.6);
+      --chip-bg: rgba(15, 23, 42, 0.85);
+      --chip-border: rgba(244, 193, 92, 0.4);
       color-scheme: dark;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    /* 📘 Blue Constitution – sakit mavi, rəsmi stil */
+    body.theme-blue {
+      --bg: #0b1728;
+      --bg-card: #0f172a;
+      --text-main: #eff6ff;
+      --text-sub: #cbd5f5;
+      --border: #1d3353;
+      --border-soft: #1e293b;
+      --accent1: #60a5fa;
+      --accent2: #38bdf8;
+      --badge-bg: linear-gradient(135deg, rgba(96, 165, 250, 0.35), rgba(15, 23, 42, 0.6));
+      --badge-text: #eff6ff;
+      --area-bg: #020617;
+      --output-bg: #020617;
+      --btn-secondary-bg: #0b1120;
+      --btn-secondary-text: #e5e7eb;
+      --btn-secondary-shadow: 0 4px 16px rgba(15, 23, 42, 0.9);
+      --chip-bg: #020617;
+      --chip-border: rgba(96, 165, 250, 0.5);
+      color-scheme: dark;
+    }
+
+    /* ⚖️ Dark Courtroom – qara + qızılı dramatik */
+    body.theme-courtroom {
+      --bg: #02010a;
+      --bg-card: #050816;
+      --text-main: #fef3c7;
+      --text-sub: #facc15;
+      --border: #4b5563;
+      --border-soft: #374151;
+      --accent1: #fbbf24;
+      --accent2: #ea580c;
+      --badge-bg: linear-gradient(135deg, rgba(234, 179, 8, 0.4), rgba(0, 0, 0, 0.8));
+      --badge-text: #fef3c7;
+      --area-bg: #020617;
+      --output-bg: #020617;
+      --btn-secondary-bg: #111827;
+      --btn-secondary-text: #fef3c7;
+      --btn-secondary-shadow: 0 6px 20px rgba(0, 0, 0, 0.9);
+      --chip-bg: #020617;
+      --chip-border: rgba(250, 204, 21, 0.5);
+      color-scheme: dark;
     }
 
     body {
@@ -31,19 +83,6 @@
       color: var(--text-main);
     }
 
-    body.light {
-      --bg: #f3f4ff;
-      --bg-card: #ffffff;
-      --text-main: #111827;
-      --text-sub: #4b5563;
-      --border: #cbd5e1;
-      --border-soft: #e5e7eb;
-      --shadow-strong: 0 18px 45px rgba(15, 23, 42, 0.16);
-      --shadow-soft: 0 8px 18px rgba(148, 163, 184, 0.45);
-      color-scheme: light;
-      background: radial-gradient(circle at top, #fef9c3, #e0ecff);
-    }
-
     .card {
       background: radial-gradient(circle at top, rgba(244, 193, 92, 0.06), var(--bg-card));
       max-width: 980px;
@@ -51,13 +90,13 @@
       margin: 16px;
       padding: 24px 28px;
       border-radius: 22px;
-      box-shadow: var(--shadow-strong);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
       box-sizing: border-box;
       border: 1px solid rgba(244, 193, 92, 0.3);
     }
 
     h1 {
-      margin-top: 0;
+      margin-top: 8px;
       font-size: 1.9rem;
       text-align: center;
       color: var(--text-main);
@@ -89,12 +128,8 @@
       font-size: 0.95rem;
       box-sizing: border-box;
       outline: none;
-      background: rgba(15, 23, 42, 0.65);
+      background: var(--area-bg);
       color: var(--text-main);
-    }
-
-    body.light textarea {
-      background: #ffffff;
     }
 
     textarea:focus {
@@ -112,14 +147,8 @@
       font-size: 0.95rem;
       box-sizing: border-box;
       outline: none;
-      background: rgba(15, 23, 42, 0.8);
+      background: var(--area-bg);
       color: var(--text-main);
-    }
-
-    body.light input[type="number"],
-    body.light input[type="text"],
-    body.light select {
-      background: #ffffff;
     }
 
     input[type="number"]:focus,
@@ -170,19 +199,13 @@
     button.primary {
       background: linear-gradient(135deg, var(--accent1), var(--accent2));
       color: #0b1022;
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     }
 
     button.secondary {
-      background: rgba(15, 23, 42, 0.7);
-      color: #f9fafb;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.6);
-    }
-
-    body.light button.secondary {
-      background: rgba(248, 250, 252, 0.9);
-      color: #1f2937;
-      box-shadow: 0 4px 10px rgba(148, 163, 184, 0.3);
+      background: var(--btn-secondary-bg);
+      color: var(--btn-secondary-text);
+      box-shadow: var(--btn-secondary-shadow);
     }
 
     button.ghost {
@@ -192,10 +215,6 @@
       border: 1px solid rgba(248, 250, 252, 0.4);
     }
 
-    body.light button.ghost {
-      border-color: rgba(148, 163, 184, 0.5);
-    }
-
     button:active {
       transform: translateY(1px) scale(0.99);
       box-shadow: none;
@@ -203,7 +222,7 @@
 
     .output-box {
       margin-top: 4px;
-      background: rgba(15, 23, 42, 0.7);
+      background: var(--output-bg);
       border-radius: 10px;
       padding: 10px 12px;
       min-height: 60px;
@@ -212,10 +231,6 @@
       white-space: pre-wrap;
       word-break: break-word;
       color: var(--text-main);
-    }
-
-    body.light .output-box {
-      background: #f9fafb;
     }
 
     .helper {
@@ -253,7 +268,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       margin-bottom: 10px;
     }
 
@@ -264,12 +279,8 @@
       padding: 3px 10px;
       border-radius: 999px;
       font-size: 0.75rem;
-      background: linear-gradient(135deg, rgba(244, 193, 92, 0.35), rgba(248, 250, 252, 0.05));
-      color: #0f172a;
-    }
-
-    body.light .badge {
-      color: #92400e;
+      background: var(--badge-bg);
+      color: var(--badge-text);
     }
 
     .motto {
@@ -278,16 +289,27 @@
       margin-top: 2px;
     }
 
-    .about {
-      margin-top: 16px;
-      padding-top: 10px;
-      border-top: 1px dashed var(--border-soft);
-      font-size: 0.82rem;
-      color: var(--text-sub);
+    .theme-switch {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    .about strong {
-      color: var(--text-main);
+    .theme-btn {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.4);
+      background: transparent;
+      color: var(--text-sub);
+      cursor: pointer;
+    }
+
+    .theme-btn.active {
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      color: #111827;
+      border-color: transparent;
     }
 
     .secret {
@@ -324,11 +346,60 @@
       color: var(--text-main);
     }
 
-    .secret-plain {
+    .puzzles {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-soft);
+    }
+
+    .puzzles h2 {
+      margin: 0 0 6px 0;
+      font-size: 1.05rem;
+      color: var(--accent1);
+    }
+
+    .puzzle-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-top: 8px;
-      font-size: 0.9rem;
+    }
+
+    .puzzle-card {
+      flex: 1;
+      min-width: 220px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
+      box-sizing: border-box;
+    }
+
+    .puzzle-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    .puzzle-cipher {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
       color: var(--text-main);
-      font-style: italic;
+    }
+
+    .about {
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-soft);
+      font-size: 0.82rem;
+      color: var(--text-sub);
+    }
+
+    .about strong {
+      color: var(--text-main);
     }
 
     @media (max-width: 600px) {
@@ -342,20 +413,23 @@
         flex-direction: column;
         align-items: flex-start;
       }
+      .theme-switch {
+        justify-content: flex-start;
+      }
     }
   </style>
 </head>
-<body>
+<body class="theme-golden">
   <div class="card">
     <div class="top-bar">
       <div>
         <span class="badge">Əli Qədimov · Hüquq nədir?</span>
         <div class="motto">“Hüququ seçməzdən əvvəl – özünüzü tanıyın.”</div>
       </div>
-      <div>
-        <button id="themeToggle" class="ghost" type="button">
-          ☀️ İşıqlı rejim
-        </button>
+      <div class="theme-switch">
+        <button class="theme-btn active" id="themeGolden" type="button">🌟 Golden Justice</button>
+        <button class="theme-btn" id="themeBlue" type="button">📘 Blue Constitution</button>
+        <button class="theme-btn" id="themeCourt" type="button">⚖️ Dark Courtroom</button>
       </div>
     </div>
 
@@ -454,15 +528,22 @@
       <h2>Müəllifdən gizli mesaj</h2>
       <p class="helper">
         Aşağıdakı cümlə Vigenère və ya Sezar şifrəsi ilə kodlaşdırılıb. İstəsəniz, yuxarıdakı alətlə
-        özünüz də açmağa cəhd edin – sonra düyməni sıxın və müəllifin sizə verdiyi mesajı görün.
+        özünüz açmağa cəhd edin – ipucu yalnız istiqamət verir.
       </p>
       <div class="secret-box">
-        <div class="secret-label">Şifrəli mətn</div>
+        <div class="secret-label">ŞİFRƏLİ MƏTN</div>
         <div id="secretCipher" class="secret-text"></div>
         <div id="secretHint" class="helper small"></div>
-        <button id="revealSecretBtn" class="primary" type="button">Mesajı aç</button>
-        <div id="secretPlain" class="secret-plain"></div>
       </div>
+    </div>
+
+    <div class="puzzles">
+      <h2>Hüquqi tapmacalar</h2>
+      <p class="helper">
+        Aşağıdakı kartlarda gizli hüquqi anlayışlar şifrələnib. Şifrəli sözü və ipucunu istifadə edərək,
+        hansı hüquqi anlayış olduğunu tapmağa çalışın.
+      </p>
+      <div id="puzzleGrid" class="puzzle-grid"></div>
     </div>
 
     <div class="about">
@@ -595,7 +676,7 @@
       return [...text].reverse().join("");
     }
 
-    // UI
+    // UI elementləri
     const inputText = document.getElementById("inputText");
     const methodSelect = document.getElementById("method");
     const shiftCol = document.getElementById("shiftCol");
@@ -610,12 +691,14 @@
     const copyBtn = document.getElementById("copyBtn");
     const clearBtn = document.getElementById("clearBtn");
     const outputBox = document.getElementById("output");
-    const themeToggle = document.getElementById("themeToggle");
+
+    const themeGoldenBtn = document.getElementById("themeGolden");
+    const themeBlueBtn = document.getElementById("themeBlue");
+    const themeCourtBtn = document.getElementById("themeCourt");
 
     const secretCipherEl = document.getElementById("secretCipher");
     const secretHintEl = document.getElementById("secretHint");
-    const secretPlainEl = document.getElementById("secretPlain");
-    const revealSecretBtn = document.getElementById("revealSecretBtn");
+    const puzzleGridEl = document.getElementById("puzzleGrid");
 
     // Substitution üçün defolt – tərsinə əlifba
     const defaultSubstUpper = [...AZ_UPPER].reverse().join("");
@@ -704,28 +787,30 @@
       shiftInput.value = r;
     });
 
-    // Dark / light tema
-    function applyTheme(theme) {
-      if (theme === "light") {
-        document.body.classList.add("light");
-        themeToggle.textContent = "🌙 Qaranlıq rejim";
+    // Tema seçimi
+    function setTheme(theme) {
+      document.body.classList.remove("theme-golden", "theme-blue", "theme-courtroom");
+      if (theme === "blue") {
+        document.body.classList.add("theme-blue");
+      } else if (theme === "court") {
+        document.body.classList.add("theme-courtroom");
       } else {
-        document.body.classList.remove("light");
-        themeToggle.textContent = "☀️ İşıqlı rejim";
+        document.body.classList.add("theme-golden");
       }
+
+      [themeGoldenBtn, themeBlueBtn, themeCourtBtn].forEach((b) =>
+        b.classList.remove("active")
+      );
+      if (theme === "blue") themeBlueBtn.classList.add("active");
+      else if (theme === "court") themeCourtBtn.classList.add("active");
+      else themeGoldenBtn.classList.add("active");
     }
 
-    const savedTheme = localStorage.getItem("huquqTheme") || "dark";
-    applyTheme(savedTheme);
+    themeGoldenBtn.addEventListener("click", () => setTheme("golden"));
+    themeBlueBtn.addEventListener("click", () => setTheme("blue"));
+    themeCourtBtn.addEventListener("click", () => setTheme("court"));
 
-    themeToggle.addEventListener("click", () => {
-      const current = document.body.classList.contains("light") ? "light" : "dark";
-      const next = current === "light" ? "dark" : "light";
-      localStorage.setItem("huquqTheme", next);
-      applyTheme(next);
-    });
-
-    // Müəllifdən gizli mesaj – data
+    // Müəllifdən gizli mesaj – yalnız şifrəli mətn + ipucu
     const secretMessages = [
       {
         type: "vigenere",
@@ -744,8 +829,6 @@
       }
     ];
 
-    let currentSecret = null;
-
     function prepareSecret() {
       const idx = Math.floor(Math.random() * secretMessages.length);
       const msg = secretMessages[idx];
@@ -762,18 +845,50 @@
         secretHintEl.textContent = "";
       }
 
-      currentSecret = { ...msg, cipher };
       secretCipherEl.textContent = cipher;
-      secretPlainEl.textContent = "";
     }
 
-    revealSecretBtn.addEventListener("click", () => {
-      if (!currentSecret) return;
-      secretPlainEl.textContent = currentSecret.plain;
-    });
+    // Hüquqi tapmacalar – şifrəli söz + ipucu (cavab UI-da göstərilmir)
+    const puzzles = [
+      {
+        cipher: caesarAz("QANUN", 5),
+        hint: "Sezar şifrəsi, açar 5. Hüququn yazılı forması, mənbə."
+      },
+      {
+        cipher: vigenereAz("EDALET", "HUQUQ", false),
+        hint: "Vigenère, açar sözü HUQUQ. Hüququn daxili məqsədi."
+      },
+      {
+        cipher: atbashAz("HUQUQ"),
+        hint: "Atbash şifrəsi. Sənin seçdiyin ixtisas, sənin ...?"
+      },
+      {
+        cipher: caesarAz("MESULIYYET", 9),
+        hint: "Sezar şifrəsi, açar 9. Hüquq pozuntusunun nəticəsi."
+      },
+      {
+        cipher: vigenereAz("AZADLIQ", "INSAN", false),
+        hint: "Vigenère, açar sözü INSAN. Hüquq və insan münasibətinin mərkəzi anlayışı."
+      }
+    ];
 
-    // İlk yükləmədə gizli mesajı hazırlayaq
+    function renderPuzzles() {
+      puzzleGridEl.innerHTML = "";
+      puzzles.forEach((p, i) => {
+        const card = document.createElement("div");
+        card.className = "puzzle-card";
+        card.innerHTML = `
+          <div class="puzzle-title">Tapmaca ${i + 1}</div>
+          <div class="puzzle-cipher">Şifrəli söz: ${p.cipher}</div>
+          <div class="helper small">İpucu: ${p.hint}</div>
+        `;
+        puzzleGridEl.appendChild(card);
+      });
+    }
+
+    // İlk yükləmədə
     prepareSecret();
+    renderPuzzles();
   </script>
 </body>
 </html>
