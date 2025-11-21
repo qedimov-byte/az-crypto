@@ -670,6 +670,22 @@ input[type="text"] {
   box-shadow: 0 0 10px rgba(0,0,0,0.25) !important;
   border-radius: 8px !important;
 }
+.header-title {
+  font-weight: 900;
+  background: linear-gradient(90deg, #d4a64a, #f4c15c, #ffe6a8, #f4c15c, #d4a64a);
+  background-size: 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldGlow 6s ease infinite;
+  text-shadow: 0 0 18px rgba(244, 193, 92, 0.35);
+}
+
+/* Qızılı metalın parlaması üçün animasiya */
+@keyframes goldGlow {
+  0% { background-position: 0%; }
+  50% { background-position: 100%; }
+  100% { background-position: 0%; }
+}
 
     
   </style>
@@ -712,7 +728,7 @@ input[type="text"] {
       </div>
     </div>
 
-    <h1>Hüquq nədir? · Kripto lab</h1>
+    <h1 class="header-title">Hüquq nədir? · Kripto lab</h1>
     <p class="subtitle">
       Sezar, Atbash, Vigenère, Substitution və hüquqi simvol şifrələri ilə hüququ bir az da oyun kimi
       kəşf edin. Qaydaları oxuyarkən düşüncəni də şifrələyin.
@@ -1684,6 +1700,7 @@ input[type="text"] {
   </script>
 </body>
 </html>
+
 
 
 
