@@ -73,8 +73,8 @@
   margin: 0;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;   
-  background: radial-gradient(circle at top, #283771, var(--bg));
+  flex-direction: column;
+  background: transparent;       
   transition: background 0.25s ease;
   color: var(--text-main);
 }
@@ -601,14 +601,14 @@
  
 .page-bg-cover {
   position: fixed;
-  inset: 0;                             
-  background-image: url("huquq-nedir-cover.png");  
+  inset: 0;
+  background-image: url("huquq-nedir-cover.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;              
-  opacity: 0.22;            /* 0.08 → 0.22 (fon daha görünən) */ 
-  filter: blur(1px);         /* fonu yumşaq göstərir */                  
-  pointer-events: none;                  
+  background-size: cover;   /* şəkil tam ekranı doldursun */
+  opacity: 0.25;            /* fon daha çox görünür */
+  filter: none;             /* blur tam ləğv olundu */
+  pointer-events: none;
   z-index: 0;
 }
 
@@ -1657,6 +1657,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
