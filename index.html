@@ -1303,50 +1303,117 @@
     }
 
     function evaluateTest() {
-      const scores = { justice: 0, analysis: 0, pragmatic: 0, human: 0 };
-      let answered = 0;
+  const scores = { justice: 0, analysis: 0, pragmatic: 0, human: 0 };
+  let answered = 0;
 
-      testData.forEach((_, qi) => {
-        const checked = document.querySelector(`input[name="q${qi}"]:checked`);
-        if (checked) {
-          const trait = checked.value;
-          scores[trait] = (scores[trait] || 0) + 1;
-          answered++;
-        }
-      });
-
-      if (answered < testData.length) {
-        alert("Zəhmət olmasa bütün suallara cavab verin.");
-        return;
-      }
-
-      let bestTrait = "justice";
-      let bestScore = -1;
-      for (const [k, v] of Object.entries(scores)) {
-        if (v > bestScore) {
-          bestScore = v;
-          bestTrait = k;
-        }
-      }
-
-      let msg = "";
-      if (bestTrait === "justice") {
-        msg =
-          "Siz daha çox ədalət yönümlü hüquqşünassınız. Sizin üçün hüquq ilk növbədə vicdan, haqsızlıqla mübarizə və insan ləyaqətinin qorunması deməkdir.";
-      } else if (bestTrait === "analysis") {
-        msg =
-          "Sizin güclü tərəfiniz analitik düşüncədir. Hüququ məntiqi sistem kimi görür, arqument qurmağı və nəzəri müzakirələri sevirsiniz.";
-      } else if (bestTrait === "pragmatic") {
-        msg =
-          "Siz praktik yönümlü hüquqşünassınız. Hüququ real problemlərin həlli, strategiya və qərarvermə aləti kimi dəyərləndirirsiniz.";
-      } else {
-        msg =
-          "Siz insan yönümlü hüquqşünassınız. Hüququ insan hekayələri, empatiya və sosial həssaslıq prizmasından görürsünüz.";
-      }
-
-      testResultEl.textContent = msg;
-      testResultEl.style.display = "block";
+  testData.forEach((_, qi) => {
+    const checked = document.querySelector(`input[name="q${qi}"]:checked`);
+    if (checked) {
+      const trait = checked.value;
+      scores[trait] = (scores[trait] || 0) + 1;
+      answered++;
     }
+  });
+
+  if (answered < testData.length) {
+    alert("Zəhmət olmasa bütün suallara cavab verin.");
+    return;
+  }
+
+  const total = testData.length;
+
+  // Faiz və sıralama
+  const traitMeta = {
+    justice: {
+      name: "Ədalət yönümlü",
+      short: "Vicdan, haqsızlıqla mübarizə, insan ləyaqəti.",
+      fields: "insan hüquqları, konstitusiya hüququ, ombudsman, hüquqi maarifləndirmə."
+    },
+    analysis: {
+      name: "Analitik yönümlü",
+      short: "Nəzəri düşüncə, məntiq, strukturlaşdırma.",
+      fields: "hüquq nəzəriyyəsi, akademik karyera, ali məhkəmə təhlili, konstitusiya şikayətləri."
+    },
+    pragmatic: {
+      name: "Praktik yönümlü",
+      short: "Nəticə, strateji yanaşma, real problemlərin həlli.",
+      fields: "kommersiya hüququ, müqavilələr, korporativ hüquq, vəkillik və konsultinq."
+    },
+    human: {
+      name: "İnsan yönümlü",
+      short: "Empatiya, hekayə dinləmək, psixoloji həssaslıq.",
+      fields: "ailə hüququ, mediasiya, əmək hüququ, sosial layihələr."
+    }
+  };
+
+  const entries = Object.entries(scores)
+    .map(([key, val]) => ({
+      key,
+      val,
+      pct: Math.round((val / total) * 100)
+    }))
+    .sort((a, b) => b.val - a.val);
+
+  const top = entries[0];
+  const second = entries[1];
+  const third = entries[2];
+
+  const diff = top.val - second.val;
+
+  let title = "";
+  let description = "";
+  let mixNote = "";
+
+  if (diff >= 2) {
+    // Aydın dominant profil
+    const t = traitMeta[top.key];
+    title = `Sizin əsas profiliniz: <strong>${t.name} hüquqşünas</strong>`;
+    description =
+      `${t.short} Sizin üçün hüquq ilk növbədə məhz bu prizma ilə dərk olunur. ` +
+      `Bu istiqamətdə potensialınız daha çox açılır və uzunmüddətli peşə məmnuniyyəti üçün də bu xətt güclü görünür.`;
+    mixNote = `Tövsiyə olunan sahələr: <strong>${t.fields}</strong>`;
+  } else if (diff === 1) {
+    // İki güclü istiqamət – hibrid profil
+    const t1 = traitMeta[top.key];
+    const t2 = traitMeta[second.key];
+    title = `Siz hibrid profillisiniz: <strong>${t1.name} + ${t2.name}</strong>`;
+    description =
+      `${t1.short} ilə yanaşı, ${t2.short.toLowerCase()} Sizin qərarvermə tərzinizdə həm dəyərlərə, həm də düşünülmüş təhlilə yer var. ` +
+      `Bu, sizi həm nəzəri müzakirələrdə, həm də praktik işdə balanslı hüquqşünas edə bilər.`;
+    mixNote =
+      `Tövsiyə olunan kombinə sahələr: <strong>${t1.fields}</strong> və ` +
+      `<strong>${t2.fields}</strong>.`;
+  } else {
+    // Balanslı, 3+ istiqamət – kompleks profil
+    const names = entries
+      .filter(e => e.val > 0)
+      .map(e => traitMeta[e.key].name)
+      .join(", ");
+    title = `Siz çoxşaxəli hüquq profilisiniz: <strong>${names}</strong>`;
+    description =
+      "Cavablarınız göstərir ki, hüquqa həm dəyərlər, həm analiz, həm də insan hekayələri prizmasından baxa bilirsiniz. " +
+      "Bu, bəzən ixtisas seçimini çətinləşdirə bilər, amma uzunmüddətli inkişaf üçün böyük üstünlükdür – fərqli sahələrdə çevik adaptasiya imkanı yaradır.";
+    mixNote =
+      "Sizə həm nəzəri, həm də praktik istiqamətlərdə kiçik sınaqlar etmək tövsiyə olunur: müxtəlif sahələrdə təcrübə, oxu klubları və simulyasiya oyunları.";
+  }
+
+  const breakdown = entries
+    .map(e => {
+      const m = traitMeta[e.key];
+      return `${m.name}: <strong>${e.val}/${total}</strong> (${e.pct}%)`;
+    })
+    .join("<br>");
+
+  testResultEl.innerHTML = `
+    <div style="margin-bottom:6px;">${title}</div>
+    <div style="font-size:0.9rem; margin-bottom:6px;">${description}</div>
+    <div class="helper" style="margin-bottom:6px;">${mixNote}</div>
+    <div class="helper" style="border-top:1px dashed var(--border-soft); padding-top:6px; margin-top:4px;">
+      Profil bölgüsü:<br>${breakdown}
+    </div>
+  `;
+  testResultEl.style.display = "block";
+}
 
     testEvalBtn.addEventListener("click", evaluateTest);
 
@@ -1483,5 +1550,6 @@
   </script>
 </body>
 </html>
+
 
 
