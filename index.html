@@ -80,18 +80,20 @@
 }
 
     .card {
-  background: radial-gradient(circle at top, rgba(244, 193, 92, 0.06), var(--bg-card));
-  width: 100%;                    /* Tam ekran */
-  max-width: 100%;                /* Limit yoxdur */
-  margin: 0;                      /* Ortaya sıxmır */
-  padding: 32px 40px;             /* İç boşluq */
-  border-radius: 0;               /* Künclər düz */
-  box-shadow: none;               /* Kölgə olmaya bilər */
+  background: transparent;          /* Şüşə effekti tam ləğv edildi */
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 32px 40px;
+  border-radius: 0;
+  box-shadow: none;
   box-sizing: border-box;
+
   border-top: 1px solid rgba(244, 193, 92, 0.2);
   border-bottom: 1px solid rgba(244, 193, 92, 0.2);
+
   position: relative;
-  overflow: hidden;
+  z-index: 1;
 }
 
 
@@ -1655,6 +1657,7 @@ body {
   </script>
 </body>
 </html>
+
 
 
 
