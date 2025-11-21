@@ -660,6 +660,17 @@ textarea {
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
   box-shadow: 0 0 10px rgba(0,0,0,0.25) !important;
 }
+/* SELECT və INPUT qutuları şəffaf olmasın */
+select,
+input[type="number"],
+input[type="text"] {
+  background: rgba(20, 22, 40, 0.75) !important;   /* Yüngül tünd fon */
+  backdrop-filter: blur(3px) !important;           /* Premium glass effekti */
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25) !important;
+  border-radius: 8px !important;
+}
+
     
   </style>
 </head>
@@ -1673,6 +1684,7 @@ textarea {
   </script>
 </body>
 </html>
+
 
 
 
