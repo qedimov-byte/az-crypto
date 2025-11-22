@@ -1410,12 +1410,11 @@ input[type="text"] {
         .map(
           (opt) => `
           <label class="test-option">
-            <input type="radio" name="testOption" value="${opt.trait}">
-            <span>${opt.label}</span>
-          </label>
-        `
-        )
-        .join("");
+      <input type="radio" name="level${step.id}" value="${opt.value}">
+      <span>${opt.text}</span>
+    </label>
+  `;
+});
 
       testGameStepsEl.innerHTML = `
         <div class="puzzle-step">
@@ -2000,6 +1999,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
