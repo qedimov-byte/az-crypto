@@ -1857,7 +1857,7 @@ const darkChapters = [
   attachDarkHandlers();
 }
 
-init();
+document.addEventListener("DOMContentLoaded", init);
     // ——————— TAPMACA SİSTEMİ ———————
 
 // Səviyyələr ardıcıldır — cavab düz olduqca növbətisi açılır
@@ -2039,14 +2039,12 @@ function checkPuzzle(i) {
   }
 }
 
-// Load at start
-document.addEventListener("DOMContentLoaded", init);
-
 
     
   </script>
 </body>
 </html>
+
 
 
 
