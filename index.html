@@ -908,9 +908,10 @@ input[type="text"] {
   <div id="darkGameSteps"></div>
 
   <div id="darkFinalBox" class="secret-box" style="display:none; margin-top:14px;">
-  <div class="secret-label">SON AÇILAN MESAJ</div>
-  <div id="darkFinalText" class="secret-text"></div>
-</div>
+    <div class="secret-label">SON AÇILAN MESAJ</div>
+    <div id="darkFinalText" class="secret-text"></div>
+  </div>
+</div> <!-- 🔚 burda dark-game bağlansın -->
 
     <div class="secret">
       <h2>Müəllifdən gizli mesaj · 1-ci səviyyə</h2>
@@ -1253,6 +1254,9 @@ input[type="text"] {
     const copyBtn = document.getElementById("copyBtn");
     const clearBtn = document.getElementById("clearBtn");
     const outputBox = document.getElementById("output");
+    const strengthInput = document.getElementById("strengthInput");
+    const strengthBtn = document.getElementById("strengthBtn");
+    const strengthResultEl = document.getElementById("strengthResult");
 
     const themeGoldenBtn = document.getElementById("themeGolden");
     const themeBlueBtn = document.getElementById("themeBlue");
@@ -1780,10 +1784,10 @@ const darkChapters = [
 
     
     function init() {
-  setTheme("golden");
-  prepareSecret();
+  // setTheme("golden");   // istəsən sonra qaytararsan
+  // prepareSecret();      // əgər ayrıca yazmamısansa, şərh et
   renderPuzzleSteps();
-  renderTestStep();   // ✅ yeni 10 səviyyəli test
+  renderTestStep();
   renderDarkGame();
   attachDarkHandlers();
 }
@@ -1992,6 +1996,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
