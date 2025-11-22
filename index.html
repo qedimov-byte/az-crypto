@@ -1770,29 +1770,6 @@ function normalizeAnswer(str) {
   secondSecretBox.style.display = "block";
 });
 
-// ---- ARDICIL HÜQUQ TAPMACALARI ----
-
-// Hər səviyyə üçün kodlanmış söz, ipucu və düzgün cavab
-const stepPuzzles = [
-  {
-    id: 1,
-    cipher: "QFSTX",                      // sadə nümunə
-    hint: "İpucu: Sezar şifrəsi, açar 3",
-    answer: "HUQUQ"
-  },
-  {
-    id: 2,
-    cipher: "ZWZĞİLQ",                   // sadə nümunə
-    hint: "İpucu: Atbash – hüququn dərin məqsədi",
-    answer: "EDALET"
-  },
-  {
-    id: 3,
-    cipher: "ŠÇĞƏƏŞÜ",                  // sadə nümunə
-    hint: "İpucu: Vigenère, açar: HUQUQ",
-    answer: "INSAN"
-  }
-];
 
 // 🔮 Mistik oyun üçün 10 səviyyəlik şifrə massiv-i
 // 🔮 Mistik oyun üçün 10 səviyyəlik latınca aforizm massiv-i
@@ -1871,76 +1848,11 @@ const darkChapters = [
 
 
     
-// HTML-i dinamik qururuq
-function renderStepPuzzles() {
-  const container = document.getElementById("puzzleSteps");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  stepPuzzles.forEach((p, index) => {
-    const div = document.createElement("div");
-    div.className = "puzzle-step";
-    div.id = `step-${p.id}`;
-    if (index > 0) div.style.display = "none"; // yalnız 1-ci açıq
-
-    div.innerHTML = `
-      <div class="puzzle-title">Səviyyə ${p.id}</div>
-      <div class="puzzle-cipher">Şifrəli söz: ${p.cipher}</div>
-      <div class="helper small">${p.hint}</div>
-      <input id="answer-${p.id}" type="text" placeholder="Cavab...">
-      <button type="button"
-              class="secondary"
-              style="margin-top:8px;"
-              onclick="checkStepPuzzle(${p.id})">
-        Yoxla
-      </button>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-// Cavabı yoxlayırıq
-function checkStepPuzzle(stepId) {
-  const p = stepPuzzles.find(x => x.id === stepId);
-  if (!p) return;
-
-  const input = document
-    .getElementById(`answer-${stepId}`)
-    .value.trim()
-    .toUpperCase();
-
-  if (input === p.answer) {
-    alert("Düzdür! Növbəti səviyyə açıldı.");
-
-    // Növbəti səviyyəni aç
-    const next = stepPuzzles.find(x => x.id === stepId + 1);
-    if (next) {
-      const nextDiv = document.getElementById(`step-${next.id}`);
-      if (nextDiv) nextDiv.style.display = "block";
-    } else {
-      // Son səviyyə idisə – gizli sözü göstər
-      const finalBox = document.getElementById("finalPuzzleBox");
-      const finalWord = document.getElementById("finalPuzzleWord");
-      if (finalBox && finalWord) {
-        finalWord.textContent = "Sənin gizli sözün: ƏDALƏT";
-        finalBox.style.display = "block";
-      }
-    }
-  } else {
-    alert("Səhvdir, bir az da düşün 🙂");
-  }
-}
-
-    
     function init() {
   setTheme("golden");
   prepareSecret();
-  renderPuzzles();
+  renderPuzzleSteps();
   renderTestQuestions();
-
-  // 🔮 Mistik 10 şifrəlik oyun:
   renderDarkGame();
   attachDarkHandlers();
 }
@@ -2128,12 +2040,13 @@ function checkPuzzle(i) {
 }
 
 // Load at start
-renderPuzzleSteps();
+document.addEventListener("DOMContentLoaded", init);
 
 
     
   </script>
 </body>
 </html>
+
 
 
