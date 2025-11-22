@@ -1038,17 +1038,18 @@ input[type="text"] {
 
 
     <div class="tests">
-      <h2>“Hüquq nədir?” üzrə idrak testi</h2>
-      <p class="helper">
-        Qısa cavablar vasitəsilə hüquqa yanaşma tərzinizi sınayın. Nəticədə hansı tərəfinizin daha güclü
-        olduğu barədə ipucu alacaqsınız: ədalət hissi, analitik düşüncə, motivasiya və ya praktiklik.
-      </p>
-      <div id="testQuestions"></div>
-      <button id="testEvalBtn" type="button" class="secondary" style="margin-top:10px;">
-        Nəticəni gör
-      </button>
-      <div id="testResult" class="test-result"></div>
-    </div>
+  <h2>“Hüquq nədir?” üzrə idrak testi · 10 səviyyə</h2>
+  <p class="helper">
+    Hər səviyyədə bir sual, dörd yol var. Cavabı seç, “Növbəti səviyyə” düyməsinə bas –
+    sonda hüquqa daha çox hansı baxışla yanaşdığını görəcəksən.
+  </p>
+
+  <!-- Səviyyələr buraya JS ilə gələcək -->
+  <div id="testGameSteps"></div>
+
+  <!-- Bütün 10 sual bitəndən sonra açıqlama burada görünəcək -->
+  <div id="testFinalBox" class="test-result" style="display:none;"></div>
+</div>
 
     <div class="strength">
       <h2>Mesajın gücü</h2>
@@ -1267,369 +1268,264 @@ input[type="text"] {
     const secondSecretBox = document.getElementById("secondSecretBox");
     const secondSecretText = document.getElementById("secondSecretText");
 
-    const testQuestionsEl = document.getElementById("testQuestions");
-    const testEvalBtn = document.getElementById("testEvalBtn");
-    const testResultEl = document.getElementById("testResult");
+    // ====== “Hüquq nədir?” üzrə İDRAK TESTİ · 10 SƏVİYYƏ ======
+    const testGameStepsEl = document.getElementById("testGameSteps");
+    const testFinalBox = document.getElementById("testFinalBox");
 
-    const strengthInput = document.getElementById("strengthInput");
-    const strengthBtn = document.getElementById("strengthBtn");
-    const strengthResultEl = document.getElementById("strengthResult");
-
-    const motOverlay = document.getElementById("motOverlay");
-
-    const defaultSubstUpper = [...AZ_UPPER].reverse().join("");
-    const defaultSubstLower = [...AZ_LOWER].reverse().join("");
-    substAlphabetInput.value = defaultSubstUpper;
-
-    methodSelect.addEventListener("change", () => {
-      const method = methodSelect.value;
-      shiftCol.style.display = "none";
-      substitutionRow.style.display = "none";
-      vigenereRow.style.display = "none";
-
-      if (method === "caesar") {
-        shiftCol.style.display = "block";
-      } else if (method === "substitution") {
-        substitutionRow.style.display = "block";
-      } else if (method === "vigenere") {
-        vigenereRow.style.display = "block";
-      }
-    });
-
-    function showMotOverlay() {
-      motOverlay.classList.add("show");
-      unlockLevel2Btn.style.display = "inline-flex";
-      setTimeout(() => {
-        motOverlay.classList.remove("show");
-      }, 1600);
-    }
-
-    function runCipher(mode) {
-      const method = methodSelect.value;
-      const text = inputText.value || "";
-      let result = "";
-
-      if (!text) {
-        outputBox.textContent = "";
-        return;
-      }
-
-      if (method === "caesar") {
-        const shiftVal = parseInt(shiftInput.value || "0", 10) || 0;
-        const effShift = mode === "encrypt" ? shiftVal : -shiftVal;
-        result = caesarAz(text, effShift);
-      } else if (method === "atbash") {
-        result = atbashAz(text);
-      } else if (method === "reverse") {
-        result = reverseText(text);
-      } else if (method === "substitution") {
-        let subst = substAlphabetInput.value.replace(/\s+/g, "");
-        if (subst.length !== ALPH_LEN) {
-          alert("Substitution əlifbanız 32 hərfdən ibarət olmalıdır (boşluqsuz).");
-          return;
-        }
-        subst = subst.toUpperCase();
-        const substUpper = subst;
-        const substLower = subst.toLowerCase();
-        const invert = mode === "decrypt";
-        result = substitutionAz(text, substUpper, substLower, invert);
-      } else if (method === "vigenere") {
-        const key = vKeyInput.value.trim();
-        if (!key) {
-          alert("Vigenère üçün açar sözü yazın.");
-          return;
-        }
-        const decrypt = mode === "decrypt";
-        result = vigenereAz(text, key, decrypt);
-      } else if (method === "symbols") {
-        if (mode === "encrypt") {
-          result = symbolEncode(text);
-        } else {
-          result =
-            "Bu hüquqi simvol şifrəsi vizual eksperimentdir və yalnız şifrələmə üçün nəzərdə tutulub. Deşifrə – müəlliflə birlikdə davam edən oyun mərhələsidir 🙂";
-        }
-      }
-
-      outputBox.textContent = result;
-
-      if (mode === "decrypt" && result.trim()) {
-        showMotOverlay();
-      }
-    }
-
-    encryptBtn.addEventListener("click", () => runCipher("encrypt"));
-    decryptBtn.addEventListener("click", () => runCipher("decrypt"));
-
-    copyBtn.addEventListener("click", async () => {
-      const text = outputBox.textContent.trim();
-      if (!text) return;
-      try {
-        await navigator.clipboard.writeText(text);
-        copyBtn.textContent = "Kopyalandı ✓";
-        setTimeout(() => (copyBtn.textContent = "Nəticəni kopyala"), 1200);
-      } catch (e) {
-        alert("Kopyalama alınmadı. Brauzer icazəsini yoxlayın.");
-      }
-    });
-
-    clearBtn.addEventListener("click", () => {
-      inputText.value = "";
-      outputBox.textContent = "";
-    });
-
-    randomShiftBtn.addEventListener("click", () => {
-      const r = Math.floor(Math.random() * ALPH_LEN);
-      shiftInput.value = r;
-    });
-
-    function setTheme(theme) {
-      document.body.classList.remove("theme-golden", "theme-blue", "theme-courtroom");
-      if (theme === "blue") {
-        document.body.classList.add("theme-blue");
-      } else if (theme === "court") {
-        document.body.classList.add("theme-courtroom");
-      } else {
-        document.body.classList.add("theme-golden");
-      }
-
-      [themeGoldenBtn, themeBlueBtn, themeCourtBtn].forEach((b) =>
-        b.classList.remove("active")
-      );
-      if (theme === "blue") themeBlueBtn.classList.add("active");
-      else if (theme === "court") themeCourtBtn.classList.add("active");
-      else themeGoldenBtn.classList.add("active");
-    }
-
-    themeGoldenBtn.addEventListener("click", () => setTheme("golden"));
-    themeBlueBtn.addEventListener("click", () => setTheme("blue"));
-    themeCourtBtn.addEventListener("click", () => setTheme("court"));
-
-    const secretMessages = [
-      {
-        type: "vigenere",
-        key: "MISSIYA",
-        plain: "Hüquq sadəcə maddələrdə deyil, sənin vicdanında başlayır."
-      },
-      {
-        type: "caesar",
-        shift: 7,
-        plain: "Əgər sual verirsənsə, artıq hüquqşünas kimi düşünməyə başlamısan."
-      },
-      {
-        type: "vigenere",
-        key: "EDALET",
-        plain: "Bu kitabın əsas sualı sadədir: hüququ yox, əvvəlcə özünü tanı."
-      }
-    ];
-
-    function prepareSecret() {
-      const idx = Math.floor(Math.random() * secretMessages.length);
-      const msg = secretMessages[idx];
-      let cipher = "";
-
-      if (msg.type === "vigenere") {
-        cipher = vigenereAz(msg.plain, msg.key, false);
-        secretHintEl.textContent = `İpucu: Vigenère, açar sözü – ${msg.key}.`;
-      } else if (msg.type === "caesar") {
-        cipher = caesarAz(msg.plain, msg.shift);
-        secretHintEl.textContent = `İpucu: Sezar şifrəsi, açar – ${msg.shift}.`;
-      } else {
-        cipher = msg.plain;
-        secretHintEl.textContent = "";
-      }
-
-      secretCipherEl.textContent = cipher;
-    }
-
-    
-
-    
-
+    // 10 səviyyəli sual dəsti
     const testData = [
       {
-        text: "1. Hüquqa gəlmək motivasiyanız daha çox nəyə bağlıdır?",
+        text: "1. Hüquqa gəlmək motivasiyan daha çox nəyə bağlıdır?",
         options: [
-          { label: "Ədalətin bərpasında rol oynamaq istəyirəm.", trait: "justice" },
-          { label: "Məntiqi məsələləri həll etməyi sevirəm.", trait: "analysis" },
-          { label: "Güclü və sabit karyera qurmaq istəyirəm.", trait: "pragmatic" },
-          { label: "İnsana və cəmiyyətə daha yaxın olmaq istəyirəm.", trait: "human" }
+          { label: "Haqsızlığa dözə bilmirəm, ədalətə töhfə vermək istəyirəm.", trait: "justice" },
+          { label: "Məntiqi məsələləri, arqumentləri və strukturu sevirəm.", trait: "analysis" },
+          { label: "Sabit, güclü və praktik karyera qurmaq istəyirəm.", trait: "pragmatic" },
+          { label: "İnsan hekayələrini, emosiyaları və taleləri dinləməyi sevirəm.", trait: "human" }
         ]
       },
       {
-        text: "2. Çətin qərar qarşısında ilk nə edirsiniz?",
+        text: "2. Çətin qərar qarşısında ilk reaksiyan nə olur?",
         options: [
-          { label: "“Bu qərar ədalətlidirmi?” sualını verirəm.", trait: "justice" },
-          { label: "Variantları müqayisə edib, məsafədən baxmağa çalışıram.", trait: "analysis" },
-          { label: "Riskləri və nəticələri praktiki tərəfdən hesablayıram.", trait: "pragmatic" },
-          { label: "Əvvəlcə kimin necə təsirlənəcəyini düşünürəm.", trait: "human" }
+          { label: "“Bu qərar ədalətlidirmi?” sualını düşünürəm.", trait: "justice" },
+          { label: "Variantları yazıb müqayisə edirəm, məntiqi təhlil aparıram.", trait: "analysis" },
+          { label: "Riskləri, nəticələri və praktik faydanı hesablayıram.", trait: "pragmatic" },
+          { label: "Ən çox kimin necə təsirlənəcəyini təsəvvür edirəm.", trait: "human" }
         ]
       },
       {
-        text: "3. Hüquq nəzəriyyəsi dərslərində sizi daha çox nə cəlb edir?",
+        text: "3. Hüquq nəzəriyyəsi dərslərində səni daha çox nə cəlb edir?",
         options: [
-          { label: "Ədalət və insan ləyaqəti ilə bağlı fəlsəfi suallar.", trait: "justice" },
-          { label: "Müxtəlif nəzəriyyələrin müqayisəli təhlili.", trait: "analysis" },
-          { label: "Qanunların real həyatda necə işləməsi.", trait: "pragmatic" },
-          { label: "Hüququn insan psixologiyasına təsiri.", trait: "human" }
+          { label: "Ədalət, insan ləyaqəti və vicdanla bağlı fəlsəfi suallar.", trait: "justice" },
+          { label: "Müxtəlif nəzəriyyələrin müqayisəli, dərin təhlili.", trait: "analysis" },
+          { label: "Qanunların real həyatda necə işlədiyi nümunələr.", trait: "pragmatic" },
+          { label: "Hüququn insan psixologiyasına və cəmiyyətə təsiri.", trait: "human" }
         ]
       },
       {
-        text: "4. Hüquqşünas obrazını necə görürsünüz?",
+        text: "4. Hüquqşünas obrazını ən çox necə görürsən?",
         options: [
-          { label: "Zülmə qarşı duran vicdan səsi kimi.", trait: "justice" },
-          { label: "Düşünülmüş arqumentlər quran analitik beyin kimi.", trait: "analysis" },
-          { label: "Problemləri həll edən peşəkar strateg kimi.", trait: "pragmatic" },
-          { label: "İnsanın hekayəsini dinləyən həssas müşahidəçi kimi.", trait: "human" }
+          { label: "Zülmə qarşı dayanan vicdan səsi kimi.", trait: "justice" },
+          { label: "Sübut və arqumentlərlə işləyən analitik beyin kimi.", trait: "analysis" },
+          { label: "Problemləri həll edən, strateji qərarlar verən peşəkar kimi.", trait: "pragmatic" },
+          { label: "İnsan hekayəsini dinləyən həssas müşahidəçi kimi.", trait: "human" }
         ]
       },
       {
-        text: "5. Gələcəkdə hansısa hüquqi sahədə özünüzü daha rahat təsəvvür edirsiniz?",
+        text: "5. Özünü daha rahat hansı hüquqi sahədə təsəvvür edirsən?",
         options: [
-          { label: "İnsan hüquqları, konstitusiya hüququ.", trait: "justice" },
-          { label: "Akademik hüquq, hüquq nəzəriyyəsi, tədqiqat.", trait: "analysis" },
-          { label: "İşgüzar hüquq, müqavilələr, korporativ hüquq.", trait: "pragmatic" },
-          { label: "Ailə hüququ, mediasiya, sosial sahələr.", trait: "human" }
+          { label: "İnsan hüquqları, konstitusiya hüququ, ictimai mübahisələr.", trait: "justice" },
+          { label: "Akademik hüquq, hüquq nəzəriyyəsi, tədqiqat və dərs demək.", trait: "analysis" },
+          { label: "Korporativ, müqavilə, kommersiya hüququ, biznes mühitləri.", trait: "pragmatic" },
+          { label: "Ailə, əmək, sosial sahələr, mediasiya və konfliktlərin yumşaldılması.", trait: "human" }
+        ]
+      },
+      {
+        text: "6. “Qanun” sözünü eşidəndə beynində ilk nə canlanır?",
+        options: [
+          { label: "Haqq və nahaqqın ayrıldığı ədalət tərəzisi.", trait: "justice" },
+          { label: "Maddələr, mənbələr, sistem və struktur.", trait: "analysis" },
+          { label: "Müqavilələr, məhkəmə prosesləri və real işlər.", trait: "pragmatic" },
+          { label: "İnsanların qorunduğu və ya əzildiyi həyat hekayələri.", trait: "human" }
+        ]
+      },
+      {
+        text: "7. Gündə əlavə 2 saat vaxtın olsa, hüquqla bağlı onu nəyə sərf edərsən?",
+        options: [
+          { label: "Məşhur ədalət işlərini, məhkəmə presedentlərini araşdıraram.", trait: "justice" },
+          { label: "Nəzəri məqalələr, kitablar oxuyaram, qeydlər apararam.", trait: "analysis" },
+          { label: "Praktik kazuslar, müqavilə nümunələri, məhkəmə sənədləri oxuyaram.", trait: "pragmatic" },
+          { label: "İnsanların yaşadığı real haqsız hekayələri dinləyər və analiz edərəm.", trait: "human" }
+        ]
+      },
+      {
+        text: "8. Bir dostun haqsızlıqla üzləşəndə, səndən nə gözlədiyini düşünürsən?",
+        options: [
+          { label: "Onun yanında durub, haqqını tələb etməsini gücləndirməyimi.", trait: "justice" },
+          { label: "Situasiyanı soyuqqanlıqla analiz edib, variantları izah etməyimi.", trait: "analysis" },
+          { label: "“Gəlin bu işi praktik yolla necə həll edək” deyən biri olmağımı.", trait: "pragmatic" },
+          { label: "Əvvəlcə onu dinləyib, emosional olaraq yanında olmağımı.", trait: "human" }
+        ]
+      },
+      {
+        text: "9. Sənə “hüquq çox çətindir” deyəndə, ən çox hansı cavab sənin ruhuna uyğundur?",
+        options: [
+          { label: "“Çətindir, çünki ədalət asan olmamalıdır” demək.", trait: "justice" },
+          { label: "“Çətindir, çünki düşünməyi və analiz etməyi tələb edir” demək.", trait: "analysis" },
+          { label: "“Çətindir, amma öyrənəndən sonra çox praktik güc verir” demək.", trait: "pragmatic" },
+          { label: "“Çətindir, çünki insanla, hisslərlə işləyir” demək.", trait: "human" }
+        ]
+      },
+      {
+        text: "10. 10 ildən sonra özünü hüquqda daha çox harada görürsən?",
+        options: [
+          { label: "Məhkəmə zalları, ictimai debatlar, insan hüquqları mübarizəsi.", trait: "justice" },
+          { label: "Universitet, tədqiqat mərkəzi, elmi məqalələr və mühazirələr.", trait: "analysis" },
+          { label: "Ofis, müqavilələr, biznes layihələri, strateji hüquqi məsləhətlər.", trait: "pragmatic" },
+          { label: "Mediasiya otağı, sosial layihələr, insanlarla daha yaxın mühitlər.", trait: "human" }
         ]
       }
     ];
 
-    function renderTestQuestions() {
-      testQuestionsEl.innerHTML = "";
-      testData.forEach((q, qi) => {
-        const block = document.createElement("div");
-        block.className = "test-question";
-        const optsHtml = q.options
-          .map(
-            (opt, oi) => `
-            <label class="test-option">
-              <input type="radio" name="q${qi}" value="${opt.trait}">
-              <span>${opt.label}</span>
-            </label>
-          `
-          )
-          .join("");
-        block.innerHTML = `
-          <div class="test-question-title">${q.text}</div>
-          <div class="test-options">${optsHtml}</div>
-        `;
-        testQuestionsEl.appendChild(block);
+    const traitMeta = {
+      justice: {
+        name: "Ədalət yönümlü",
+        short: "Vicdan, haqsızlıqla mübarizə, insan ləyaqəti Sənə mühümdür.",
+        fields: "insan hüquqları, konstitusiya hüququ, ictimai müdafiə, hüquqi maarifləndirmə."
+      },
+      analysis: {
+        name: "Analitik yönümlü",
+        short: "Nəzəri düşüncə, məntiq, strukturlaşdırma və arqument Səni cəlb edir.",
+        fields: "hüquq nəzəriyyəsi, akademik karyera, ali məhkəmə təhlili, konstitusiya şikayətləri."
+      },
+      pragmatic: {
+        name: "Praktik yönümlü",
+        short: "Nəticə, effektivlik və real problemlərin həlli Sənin fokusundadır.",
+        fields: "kommersiya hüququ, müqavilələr, korporativ hüquq, vəkillik, konsaltinq."
+      },
+      human: {
+        name: "İnsan yönümlü",
+        short: "Empatiya, hekayə dinləmək, psixoloji həssaslıq Sənə daha yaxındır.",
+        fields: "ailə hüququ, mediasiya, əmək hüququ, sosial layihələr və insan mərkəzli sahələr."
+      }
+    };
+
+    let testAnswers = [];
+    let currentTestIndex = 0;
+
+    function renderTestStep() {
+      if (!testGameStepsEl) return;
+
+      const q = testData[currentTestIndex];
+      const isLast = currentTestIndex === testData.length - 1;
+
+      const optionsHtml = q.options
+        .map(
+          (opt) => `
+          <label class="test-option">
+            <input type="radio" name="testOption" value="${opt.trait}">
+            <span>${opt.label}</span>
+          </label>
+        `
+        )
+        .join("");
+
+      testGameStepsEl.innerHTML = `
+        <div class="puzzle-step">
+          <div class="test-question-title" style="margin-bottom:6px;">
+            ${q.text}
+          </div>
+          <div class="test-options">
+            ${optionsHtml}
+          </div>
+          <button
+            type="button"
+            class="secondary"
+            id="testNextBtn"
+            style="margin-top:10px;"
+          >
+            ${isLast ? "Nəticəni gör" : "Növbəti səviyyə →"}
+          </button>
+        </div>
+      `;
+
+      const nextBtn = document.getElementById("testNextBtn");
+      nextBtn.addEventListener("click", () => {
+        const checked = document.querySelector('input[name="testOption"]:checked');
+        if (!checked) {
+          alert("Zəhmət olmasa cavab variantlarından birini seç.");
+          return;
+        }
+
+        testAnswers.push(checked.value);
+
+        if (!isLast) {
+          currentTestIndex++;
+          renderTestStep();
+        } else {
+          finishTest();
+        }
       });
     }
 
-    function evaluateTest() {
-  const scores = { justice: 0, analysis: 0, pragmatic: 0, human: 0 };
-  let answered = 0;
+    function finishTest() {
+      const scores = { justice: 0, analysis: 0, pragmatic: 0, human: 0 };
+      testAnswers.forEach((trait) => {
+        if (scores.hasOwnProperty(trait)) {
+          scores[trait] += 1;
+        }
+      });
 
-  testData.forEach((_, qi) => {
-    const checked = document.querySelector(`input[name="q${qi}"]:checked`);
-    if (checked) {
-      const trait = checked.value;
-      scores[trait] = (scores[trait] || 0) + 1;
-      answered++;
+      const total = testData.length;
+
+      const entries = Object.entries(scores)
+        .map(([key, val]) => ({
+          key,
+          val,
+          pct: Math.round((val / total) * 100)
+        }))
+        .sort((a, b) => b.val - a.val);
+
+      const top = entries[0];
+      const second = entries[1];
+
+      const diff = top.val - second.val;
+
+      let title = "";
+      let description = "";
+      let mixNote = "";
+
+      if (diff >= 3) {
+        const t = traitMeta[top.key];
+        title = `Sənin əsas profilin: <strong>${t.name} hüquqşünas</strong>`;
+        description =
+          `${t.short} Hüququ ilk növbədə bu prizma ilə görürsən və uzaqmüddətli peşə məmnuniyyəti üçün də bu xətt güclü görünür.`;
+        mixNote = `Sənin üçün xüsusilə uyğun ola bilən sahələr: <strong>${t.fields}</strong>`;
+      } else if (diff >= 1) {
+        const t1 = traitMeta[top.key];
+        const t2 = traitMeta[second.key];
+        title = `Sən hibrid profillisən: <strong>${t1.name} + ${t2.name}</strong>`;
+        description =
+          `${t1.short} ilə yanaşı, ${t2.short.toLowerCase()} Səndə həm dəyərlərə, həm də düşünülmüş təhlilə yer var. ` +
+          `Bu, səni həm nəzəri müzakirələrdə, həm də praktik işdə balanslı hüquqşünas edə bilər.`;
+        mixNote =
+          `Tövsiyə olunan kombinə sahələr: <strong>${t1.fields}</strong> və ` +
+          `<strong>${t2.fields}</strong>.`;
+      } else {
+        const names = entries
+          .filter((e) => e.val > 0)
+          .map((e) => traitMeta[e.key].name)
+          .join(", ");
+        title = `Sənin profilin çoxşaxəlidir: <strong>${names}</strong>`;
+        description =
+          "Sən hüquqa həm dəyərlər, həm analiz, həm də insan hekayələri prizmasından baxa bilirsən. " +
+          "Bu, ixtisas seçimini bir az çətinləşdirə bilər, amma uzunmüddətli inkişaf üçün böyük üstünlükdür – " +
+          "fərqli sahələrdə çevik adaptasiya imkanı verir.";
+        mixNote =
+          "Sənə həm nəzəri, həm də praktik istiqamətlərdə kiçik sınaqlar etmək tövsiyə olunur: müxtəlif sahələrdə təcrübə, oxu klubları və simulyasiya oyunları.";
+      }
+
+      const breakdown = entries
+        .map((e) => {
+          const m = traitMeta[e.key];
+          return `${m.name}: <strong>${e.val}/${total}</strong> (${e.pct}%)`;
+        })
+        .join("<br>");
+
+      if (testGameStepsEl) {
+        testGameStepsEl.innerHTML = "";
+      }
+
+      testFinalBox.innerHTML = `
+        <div style="margin-bottom:6px;">${title}</div>
+        <div style="font-size:0.9rem; margin-bottom:6px;">${description}</div>
+        <div class="helper" style="margin-bottom:6px;">${mixNote}</div>
+        <div class="helper" style="border-top:1px dashed var(--border-soft); padding-top:6px; margin-top:4px;">
+          Profil bölgüsü:<br>${breakdown}
+        </div>
+      `;
+      testFinalBox.style.display = "block";
     }
-  });
 
-  if (answered < testData.length) {
-    alert("Zəhmət olmasa bütün suallara cavab verin.");
-    return;
-  }
-
-  const total = testData.length;
-
-  // Faiz və sıralama
-  const traitMeta = {
-    justice: {
-      name: "Ədalət yönümlü",
-      short: "Vicdan, haqsızlıqla mübarizə, insan ləyaqəti.",
-      fields: "insan hüquqları, konstitusiya hüququ, ombudsman, hüquqi maarifləndirmə."
-    },
-    analysis: {
-      name: "Analitik yönümlü",
-      short: "Nəzəri düşüncə, məntiq, strukturlaşdırma.",
-      fields: "hüquq nəzəriyyəsi, akademik karyera, ali məhkəmə təhlili, konstitusiya şikayətləri."
-    },
-    pragmatic: {
-      name: "Praktik yönümlü",
-      short: "Nəticə, strateji yanaşma, real problemlərin həlli.",
-      fields: "kommersiya hüququ, müqavilələr, korporativ hüquq, vəkillik və konsultinq."
-    },
-    human: {
-      name: "İnsan yönümlü",
-      short: "Empatiya, hekayə dinləmək, psixoloji həssaslıq.",
-      fields: "ailə hüququ, mediasiya, əmək hüququ, sosial layihələr."
-    }
-  };
-
-  const entries = Object.entries(scores)
-    .map(([key, val]) => ({
-      key,
-      val,
-      pct: Math.round((val / total) * 100)
-    }))
-    .sort((a, b) => b.val - a.val);
-
-  const top = entries[0];
-  const second = entries[1];
-  const third = entries[2];
-
-  const diff = top.val - second.val;
-
-  let title = "";
-  let description = "";
-  let mixNote = "";
-
-  if (diff >= 2) {
-    // Aydın dominant profil
-    const t = traitMeta[top.key];
-    title = `Sizin əsas profiliniz: <strong>${t.name} hüquqşünas</strong>`;
-    description =
-      `${t.short} Sizin üçün hüquq ilk növbədə məhz bu prizma ilə dərk olunur. ` +
-      `Bu istiqamətdə potensialınız daha çox açılır və uzunmüddətli peşə məmnuniyyəti üçün də bu xətt güclü görünür.`;
-    mixNote = `Tövsiyə olunan sahələr: <strong>${t.fields}</strong>`;
-  } else if (diff === 1) {
-    // İki güclü istiqamət – hibrid profil
-    const t1 = traitMeta[top.key];
-    const t2 = traitMeta[second.key];
-    title = `Siz hibrid profillisiniz: <strong>${t1.name} + ${t2.name}</strong>`;
-    description =
-      `${t1.short} ilə yanaşı, ${t2.short.toLowerCase()} Sizin qərarvermə tərzinizdə həm dəyərlərə, həm də düşünülmüş təhlilə yer var. ` +
-      `Bu, sizi həm nəzəri müzakirələrdə, həm də praktik işdə balanslı hüquqşünas edə bilər.`;
-    mixNote =
-      `Tövsiyə olunan kombinə sahələr: <strong>${t1.fields}</strong> və ` +
-      `<strong>${t2.fields}</strong>.`;
-  } else {
-    // Balanslı, 3+ istiqamət – kompleks profil
-    const names = entries
-      .filter(e => e.val > 0)
-      .map(e => traitMeta[e.key].name)
-      .join(", ");
-    title = `Siz çoxşaxəli hüquq profilisiniz: <strong>${names}</strong>`;
-    description =
-      "Cavablarınız göstərir ki, hüquqa həm dəyərlər, həm analiz, həm də insan hekayələri prizmasından baxa bilirsiniz. " +
-      "Bu, bəzən ixtisas seçimini çətinləşdirə bilər, amma uzunmüddətli inkişaf üçün böyük üstünlükdür – fərqli sahələrdə çevik adaptasiya imkanı yaradır.";
-    mixNote =
-      "Sizə həm nəzəri, həm də praktik istiqamətlərdə kiçik sınaqlar etmək tövsiyə olunur: müxtəlif sahələrdə təcrübə, oxu klubları və simulyasiya oyunları.";
-  }
-
-  const breakdown = entries
-    .map(e => {
-      const m = traitMeta[e.key];
-      return `${m.name}: <strong>${e.val}/${total}</strong> (${e.pct}%)`;
-    })
-    .join("<br>");
-
-  testResultEl.innerHTML = `
-    <div style="margin-bottom:6px;">${title}</div>
-    <div style="font-size:0.9rem; margin-bottom:6px;">${description}</div>
-    <div class="helper" style="margin-bottom:6px;">${mixNote}</div>
-    <div class="helper" style="border-top:1px dashed var(--border-soft); padding-top:6px; margin-top:4px;">
-      Profil bölgüsü:<br>${breakdown}
-    </div>
-  `;
-  testResultEl.style.display = "block";
-}
-
-    testEvalBtn.addEventListener("click", evaluateTest);
 
     function evaluateStrength(text) {
       if (!text.trim()) return null;
@@ -1887,7 +1783,7 @@ const darkChapters = [
   setTheme("golden");
   prepareSecret();
   renderPuzzleSteps();
-  renderTestQuestions();
+  renderTestStep();   // ✅ yeni 10 səviyyəli test
   renderDarkGame();
   attachDarkHandlers();
 }
@@ -2096,6 +1992,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
