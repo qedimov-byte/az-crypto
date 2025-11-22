@@ -1276,6 +1276,143 @@ input[type="text"] {
     const secondSecretBox = document.getElementById("secondSecretBox");
     const secondSecretText = document.getElementById("secondSecretText");
 
+   // ====== ŞİFRƏLƏMƏ FUNKSİYALARI VƏ DÜYMƏLƏR ======
+
+function updateMethodUI() {
+  const method = methodSelect.value;
+
+  shiftCol.style.display = method === "caesar" ? "block" : "none";
+  vigenereRow.style.display = method === "vigenere" ? "flex" : "none";
+  substitutionRow.style.display = method === "substitution" ? "flex" : "none";
+}
+
+methodSelect.addEventListener("change", updateMethodUI);
+
+randomShiftBtn.addEventListener("click", () => {
+  const randomShift = Math.floor(Math.random() * ALPH_LEN) + 1;
+  shiftInput.value = randomShift;
+});
+
+// əsas şifrələmə funksiyası
+function handleEncryptDecrypt(isEncrypt) {
+  const text = inputText.value || "";
+  if (!text) {
+    outputBox.textContent = "";
+    return;
+  }
+
+  const method = methodSelect.value;
+  let result = "";
+
+  if (method === "caesar") {
+    const shift = parseInt(shiftInput.value, 10) || 0;
+    result = isEncrypt ? caesarAz(text, shift) : caesarAz(text, -shift);
+  } else if (method === "vigenere") {
+    const key = vKeyInput.value || "";
+    result = vigenereAz(text, key, !isEncrypt);
+  } else if (method === "atbash") {
+    result = atbashAz(text);
+  } else if (method === "substitution") {
+    const subst = substAlphabetInput.value || "";
+    const cleaned = [...subst].filter((ch) =>
+      AZ_UPPER.includes(ch.toUpperCase())
+    );
+
+    if (cleaned.length !== ALPH_LEN) {
+      alert("Substitution əlifbası 32 hərfdən ibarət olmalıdır.");
+      return;
+    }
+
+    const substUpper = cleaned.join("").toUpperCase();
+    const substLower = cleaned.join("").toLowerCase();
+    result = substitutionAz(text, substUpper, substLower, !isEncrypt);
+  } else if (method === "reverse") {
+    result = reverseText(text);
+  } else if (method === "symbols") {
+    if (!isEncrypt) {
+      alert("Simvol şifrəsi yalnız şifrələmə üçündür – açmaq üçün istifadə olunmur.");
+      result = text;
+    } else {
+      result = symbolEncode(text);
+    }
+  }
+
+  outputBox.textContent = result;
+}
+
+encryptBtn.addEventListener("click", () => handleEncryptDecrypt(true));
+decryptBtn.addEventListener("click", () => handleEncryptDecrypt(false));
+
+copyBtn.addEventListener("click", async () => {
+  const text = outputBox.textContent || "";
+  if (!text) return;
+
+  try {
+    await navigator.clipboard.writeText(text);
+    const old = copyBtn.textContent;
+    copyBtn.textContent = "Kopyalandı ✅";
+    setTimeout(() => (copyBtn.textContent = old), 1200);
+  } catch (e) {
+    alert("Kopyalama alınmadı (brauzer icazəsini yoxla).");
+  }
+});
+
+clearBtn.addEventListener("click", () => {
+  inputText.value = "";
+  outputBox.textContent = "";
+});
+
+// ====== TEMA FUNKSİYASI ======
+
+function setTheme(theme) {
+  document.body.classList.remove("theme-blue", "theme-courtroom", "theme-golden");
+
+  if (theme === "golden") {
+    document.body.classList.add("theme-golden");
+  } else if (theme === "blue") {
+    document.body.classList.add("theme-blue");
+  } else if (theme === "court") {
+    document.body.classList.add("theme-courtroom");
+  }
+
+  themeGoldenBtn.classList.remove("active");
+  themeBlueBtn.classList.remove("active");
+  themeCourtBtn.classList.remove("active");
+
+  if (theme === "golden") themeGoldenBtn.classList.add("active");
+  if (theme === "blue") themeBlueBtn.classList.add("active");
+  if (theme === "court") themeCourtBtn.classList.add("active");
+
+  try {
+    localStorage.setItem("huquqTheme", theme);
+  } catch (e) {
+    // localStorage bağlı ola bilər – problem deyil
+  }
+}
+
+themeGoldenBtn.addEventListener("click", () => setTheme("golden"));
+themeBlueBtn.addEventListener("click", () => setTheme("blue"));
+themeCourtBtn.addEventListener("click", () => setTheme("court"));
+
+
+    // ====== GİZLİ MESAJI HAZIRLA (1-ci səviyyə) ======
+
+function prepareSecret() {
+  if (!secretCipherEl || !secretHintEl) return;
+
+  const plain =
+    "Bu kitabı oxuyan sənin içində gizli bir ədalət hissi var. Onu qorumaq sənin missiyandır.";
+  const key = "EDALET";
+
+  // sadə: Vigenère ilə şifrələyək
+  const cipher = vigenereAz(plain.toUpperCase(), key);
+
+  secretCipherEl.textContent = cipher;
+  secretHintEl.textContent = "İpucu: Vigenère, açar sözü – EDALET.";
+}
+
+    
+    
     // ====== “Hüquq nədir?” üzrə İDRAK TESTİ · 10 SƏVİYYƏ ======
     const testGameStepsEl = document.getElementById("testGameSteps");
     const testFinalBox = document.getElementById("testFinalBox");
@@ -1400,138 +1537,141 @@ input[type="text"] {
     let testAnswers = [];
     let currentTestIndex = 0;
 
-    function renderTestStep() {
-      if (!testGameStepsEl) return;
+function renderTestStep() {
+  if (!testGameStepsEl) return;
 
-      const q = testData[currentTestIndex];
-      const isLast = currentTestIndex === testData.length - 1;
+  const q = testData[currentTestIndex];
+  const isLast = currentTestIndex === testData.length - 1;
 
-      const optionsHtml = q.options
-        .map(
-          (opt) => `
-          <label class="test-option">
-      <input type="radio" name="level${step.id}" value="${opt.value}">
-      <span>${opt.text}</span>
-    </label>
+  const optionsHtml = q.options
+    .map(
+      (opt) => `
+        <label class="test-option">
+          <input type="radio" name="testOption" value="${opt.trait}">
+          <span>${opt.label}</span>
+        </label>
+      `
+    )
+    .join("");
+
+  testGameStepsEl.innerHTML = `
+    <div class="puzzle-step">
+      <div class="test-question-title" style="margin-bottom:6px;">
+        ${q.text}
+      </div>
+      <div class="test-options">
+        ${optionsHtml}
+      </div>
+      <button
+        type="button"
+        class="secondary"
+        id="testNextBtn"
+        style="margin-top:10px;"
+      >
+        ${isLast ? "Nəticəni gör" : "Növbəti səviyyə →"}
+      </button>
+    </div>
   `;
-});
 
-      testGameStepsEl.innerHTML = `
-        <div class="puzzle-step">
-          <div class="test-question-title" style="margin-bottom:6px;">
-            ${q.text}
-          </div>
-          <div class="test-options">
-            ${optionsHtml}
-          </div>
-          <button
-            type="button"
-            class="secondary"
-            id="testNextBtn"
-            style="margin-top:10px;"
-          >
-            ${isLast ? "Nəticəni gör" : "Növbəti səviyyə →"}
-          </button>
-        </div>
-      `;
-
-      const nextBtn = document.getElementById("testNextBtn");
-      nextBtn.addEventListener("click", () => {
-        const checked = document.querySelector('input[name="testOption"]:checked');
-        if (!checked) {
-          alert("Zəhmət olmasa cavab variantlarından birini seç.");
-          return;
-        }
-
-        testAnswers.push(checked.value);
-
-        if (!isLast) {
-          currentTestIndex++;
-          renderTestStep();
-        } else {
-          finishTest();
-        }
-      });
+  const nextBtn = document.getElementById("testNextBtn");
+  nextBtn.addEventListener("click", () => {
+    const checked = document.querySelector('input[name="testOption"]:checked');
+    if (!checked) {
+      alert("Zəhmət olmasa cavab variantlarından birini seç.");
+      return;
     }
 
-    function finishTest() {
-      const scores = { justice: 0, analysis: 0, pragmatic: 0, human: 0 };
-      testAnswers.forEach((trait) => {
-        if (scores.hasOwnProperty(trait)) {
-          scores[trait] += 1;
-        }
-      });
+    // seçilmiş trait-i yadda saxlayırıq
+    testAnswers.push(checked.value);
 
-      const total = testData.length;
-
-      const entries = Object.entries(scores)
-        .map(([key, val]) => ({
-          key,
-          val,
-          pct: Math.round((val / total) * 100)
-        }))
-        .sort((a, b) => b.val - a.val);
-
-      const top = entries[0];
-      const second = entries[1];
-
-      const diff = top.val - second.val;
-
-      let title = "";
-      let description = "";
-      let mixNote = "";
-
-      if (diff >= 3) {
-        const t = traitMeta[top.key];
-        title = `Sənin əsas profilin: <strong>${t.name} hüquqşünas</strong>`;
-        description =
-          `${t.short} Hüququ ilk növbədə bu prizma ilə görürsən və uzaqmüddətli peşə məmnuniyyəti üçün də bu xətt güclü görünür.`;
-        mixNote = `Sənin üçün xüsusilə uyğun ola bilən sahələr: <strong>${t.fields}</strong>`;
-      } else if (diff >= 1) {
-        const t1 = traitMeta[top.key];
-        const t2 = traitMeta[second.key];
-        title = `Sən hibrid profillisən: <strong>${t1.name} + ${t2.name}</strong>`;
-        description =
-          `${t1.short} ilə yanaşı, ${t2.short.toLowerCase()} Səndə həm dəyərlərə, həm də düşünülmüş təhlilə yer var. ` +
-          `Bu, səni həm nəzəri müzakirələrdə, həm də praktik işdə balanslı hüquqşünas edə bilər.`;
-        mixNote =
-          `Tövsiyə olunan kombinə sahələr: <strong>${t1.fields}</strong> və ` +
-          `<strong>${t2.fields}</strong>.`;
-      } else {
-        const names = entries
-          .filter((e) => e.val > 0)
-          .map((e) => traitMeta[e.key].name)
-          .join(", ");
-        title = `Sənin profilin çoxşaxəlidir: <strong>${names}</strong>`;
-        description =
-          "Sən hüquqa həm dəyərlər, həm analiz, həm də insan hekayələri prizmasından baxa bilirsən. " +
-          "Bu, ixtisas seçimini bir az çətinləşdirə bilər, amma uzunmüddətli inkişaf üçün böyük üstünlükdür – " +
-          "fərqli sahələrdə çevik adaptasiya imkanı verir.";
-        mixNote =
-          "Sənə həm nəzəri, həm də praktik istiqamətlərdə kiçik sınaqlar etmək tövsiyə olunur: müxtəlif sahələrdə təcrübə, oxu klubları və simulyasiya oyunları.";
-      }
-
-      const breakdown = entries
-        .map((e) => {
-          const m = traitMeta[e.key];
-          return `${m.name}: <strong>${e.val}/${total}</strong> (${e.pct}%)`;
-        })
-        .join("<br>");
-
-      if (testGameStepsEl) {
-        testGameStepsEl.innerHTML = "";
-      }
-
-      testFinalBox.innerHTML = `
-        <div style="margin-bottom:6px;">${title}</div>
-        <div style="font-size:0.9rem; margin-bottom:6px;">${description}</div>
-        <div class="helper" style="margin-bottom:6px;">${mixNote}</div>
-        <div class="helper" style="border-top:1px dashed var(--border-soft); padding-top:6px; margin-top:4px;">
-          Profil bölgüsü:<br>${breakdown}
-        </div>
-      `;
-      testFinalBox.style.display = "block";
+    if (!isLast) {
+      currentTestIndex++;
+      renderTestStep();
+    } else {
+      finishTest();
     }
+  });
+}
+
+function finishTest() {
+  const scores = { justice: 0, analysis: 0, pragmatic: 0, human: 0 };
+  testAnswers.forEach((trait) => {
+    if (scores.hasOwnProperty(trait)) {
+      scores[trait] += 1;
+    }
+  });
+
+  const total = testData.length;
+
+  const entries = Object.entries(scores)
+    .map(([key, val]) => ({
+      key,
+      val,
+      pct: Math.round((val / total) * 100)
+    }))
+    .sort((a, b) => b.val - a.val);
+
+  const top = entries[0];
+  const second = entries[1];
+
+  const diff = top.val - second.val;
+
+  let title = "";
+  let description = "";
+  let mixNote = "";
+
+  if (diff >= 3) {
+    const t = traitMeta[top.key];
+    title = `Sənin əsas profilin: <strong>${t.name} hüquqşünas</strong>`;
+    description =
+      `${t.short} Hüququ ilk növbədə bu prizma ilə görürsən və uzaqmüddətli peşə məmnuniyyəti üçün də bu xətt güclü görünür.`;
+    mixNote = `Sənin üçün xüsusilə uyğun ola bilən sahələr: <strong>${t.fields}</strong>`;
+  } else if (diff >= 1) {
+    const t1 = traitMeta[top.key];
+    const t2 = traitMeta[second.key];
+    title = `Sən hibrid profillisən: <strong>${t1.name} + ${t2.name}</strong>`;
+    description =
+      `${t1.short} ilə yanaşı, ${t2.short.toLowerCase()} Səndə həm dəyərlərə, həm də düşünülmüş təhlilə yer var. ` +
+      `Bu, səni həm nəzəri müzakirələrdə, həm də praktik işdə balanslı hüquqşünas edə bilər.`;
+    mixNote =
+      `Tövsiyə olunan kombinə sahələr: <strong>${t1.fields}</strong> və ` +
+      `<strong>${t2.fields}</strong>.`;
+  } else {
+    const names = entries
+      .filter((e) => e.val > 0)
+      .map((e) => traitMeta[e.key].name)
+      .join(", ");
+    title = `Sənin profilin çoxşaxəlidir: <strong>${names}</strong>`;
+    description =
+      "Sən hüquqa həm dəyərlər, həm analiz, həm də insan hekayələri prizmasından baxa bilirsən. " +
+      "Bu, ixtisas seçimini bir az çətinləşdirə bilər, amma uzunmüddətli inkişaf üçün böyük üstünlükdür – " +
+      "fərqli sahələrdə çevik adaptasiya imkanı verir.";
+    mixNote =
+      "Sənə həm nəzəri, həm də praktik istiqamətlərdə kiçik sınaqlar etmək tövsiyə olunur: müxtəlif sahələrdə təcrübə, oxu klubları və simulyasiya oyunları.";
+  }
+
+  const breakdown = entries
+    .map((e) => {
+      const m = traitMeta[e.key];
+      return `${m.name}: <strong>${e.val}/${total}</strong> (${e.pct}%)`;
+    })
+    .join("<br>");
+
+  if (testGameStepsEl) {
+    testGameStepsEl.innerHTML = "";
+  }
+
+  testFinalBox.innerHTML = `
+    <div style="margin-bottom:6px;">${title}</div>
+    <div style="font-size:0.9rem; margin-bottom:6px;">${description}</div>
+    <div class="helper" style="margin-bottom:6px;">${mixNote}</div>
+    <div class="helper" style="border-top:1px dashed var(--border-soft); padding-top:6px; margin-top:4px;">
+      Profil bölgüsü:<br>${breakdown}
+    </div>
+  `;
+  testFinalBox.style.display = "block";
+}
+
 
 
     function evaluateStrength(text) {
@@ -1787,15 +1927,31 @@ const darkChapters = [
 
     
     function init() {
-  // setTheme("golden");   // istəsən sonra qaytararsan
-  // prepareSecret();      // əgər ayrıca yazmamısansa, şərh et
+  // Tema – yadda qalan seçimi açırıq
+  let savedTheme = "golden";
+  try {
+    savedTheme = localStorage.getItem("huquqTheme") || "golden";
+  } catch (e) {
+    savedTheme = "golden";
+  }
+  setTheme(savedTheme);
+
+  // Şifrələmə UI-nı hazırla
+  updateMethodUI();
+
+  // 1-ci gizli mesajı hazırla
+  prepareSecret();
+
+  // Tapmacalar, oyunlar, idrak testi
   renderPuzzleSteps();
-  renderTestStep();
   renderDarkGame();
   attachDarkHandlers();
+  renderTestStep();
 }
 
 document.addEventListener("DOMContentLoaded", init);
+   
+    
     // ——————— TAPMACA SİSTEMİ ———————
 
 // Səviyyələr ardıcıldır — cavab düz olduqca növbətisi açılır
@@ -1999,6 +2155,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
