@@ -397,17 +397,7 @@
       color: var(--text-main);
     }
 
-    .tests {
-  margin-top: 22px;
-  padding-top: 14px;
-  border-top: 1px dashed var(--border-soft);
-
-  /* PROBLEMİ HƏLL EDƏN HİSSƏ */
-  width: 100%;                 /* kartın içi nə qədər genişdirsə, test də o qədər geniş olsun */
-  max-width: none !important;  /* 900px limiti götürülsün */
-  margin-left: 0 !important;   /* ortalama ləğv olunur */
-  margin-right: 0 !important;
-}
+      
 
     .tests h2 {
       margin: 0 0 6px 0;
@@ -430,76 +420,7 @@
       color: var(--text-main);
     }
 
-    .test-options {
-      margin-top: 4px;
-    }
-
-.test-options {
-  margin-top: 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;   /* hamısını solda topla */
-}
-
-.test-option {
-  display: flex;
-  align-items: flex-start;   /* radio + mətn baş-başa */
-  justify-content: flex-start;
-  gap: 10px;
-  margin-top: 6px;
-  font-size: 0.9rem;
-  color: var(--text-sub);
-}
-
-.test-option input[type="radio"] {
-  margin: 3px 0 0 0;
-}
-
-.test-option span {
-  display: block;
-  text-align: left;
-  margin-top: 0;
-}
-
-/* --------------------- */
-/* İDRAK TESTİ – DÜZGÜN HİZALAMA */
-/* --------------------- */
-
-.tests {
-  text-align: left !important;
-}
-
-.tests .test-options {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  margin-top: 10px;
-  width: 100% !important;
-}
-
-.tests .test-option {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: flex-start !important;
-  justify-content: flex-start !important;
-  gap: 10px !important;
-  margin: 8px 0;
-  width: 100% !important;
-  max-width: 500px; /* Yazılar səliqəli oxu sütunu kimi olsun */
-}
-
-.tests .test-option input[type="radio"] {
-  margin-top: 3px !important;
-  flex-shrink: 0 !important;
-}
-
-.tests .test-option span {
-  text-align: left !important;
-  display: block !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
+ 
 
     
     .test-result {
@@ -829,31 +750,51 @@ input[type="text"] {
   animation: shake 0.3s ease;
 }
 
-/* --- HÜQUQ TESTİ ÜÇÜN MƏCBUR HİZALAMA --- */
+/* --- “Hüquq nədir?” idrak testi – təmiz hizalama --- */
 
 .tests {
   margin-top: 22px;
   padding-top: 14px;
   border-top: 1px dashed var(--border-soft);
   width: 100%;
+  text-align: left;
+}
+
+.tests h2 {
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+  color: var(--accent1);
+}
+
+.test-question {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--chip-bg);
+  border: 1px solid var(--border-soft);
+  font-size: 0.86rem;
+}
+
+.test-question-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-main);
 }
 
 /* variantların konteyneri */
 .tests .test-options {
-  margin-top: 4px;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-/* hər bir variant: radio + mətn */
+/* hər bir variant: radio + mətn yan-yana */
 .tests .test-option {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
-  gap: 8px;
-  margin-top: 6px;
+  display: grid;
+  grid-template-columns: auto 1fr; /* 1-ci sütun radio, 2-ci mətndir */
+  align-items: flex-start;
+  column-gap: 8px;
   font-size: 0.9rem;
   color: var(--text-sub);
   width: 100%;
@@ -861,16 +802,13 @@ input[type="text"] {
 
 /* radio düyməsi */
 .tests .test-option input[type="radio"] {
-  flex: 0 0 auto;
-  margin: 3px 0 0 0;
+  margin-top: 3px;
 }
 
 /* mətn */
 .tests .test-option span {
-  flex: 1 1 auto;
-  display: block;
   text-align: left;
-  margin: 0 !important;
+  display: block;
 }
 
 
@@ -2257,6 +2195,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
