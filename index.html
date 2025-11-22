@@ -461,6 +461,47 @@
   margin-top: 0;
 }
 
+/* --------------------- */
+/* İDRAK TESTİ – DÜZGÜN HİZALAMA */
+/* --------------------- */
+
+.tests {
+  text-align: left !important;
+}
+
+.tests .test-options {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  margin-top: 10px;
+  width: 100% !important;
+}
+
+.tests .test-option {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  margin: 8px 0;
+  width: 100% !important;
+  max-width: 500px; /* Yazılar səliqəli oxu sütunu kimi olsun */
+}
+
+.tests .test-option input[type="radio"] {
+  margin-top: 3px !important;
+  flex-shrink: 0 !important;
+}
+
+.tests .test-option span {
+  text-align: left !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+    
     .test-result {
       margin-top: 10px;
       font-size: 0.9rem;
@@ -2216,6 +2257,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
