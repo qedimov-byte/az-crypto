@@ -398,10 +398,13 @@
     }
 
     .tests {
-      margin-top: 22px;
-      padding-top: 14px;
-      border-top: 1px dashed var(--border-soft);
-    }
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-soft);
+  max-width: 900px;        /* blokun eni */
+  margin-left: auto;       /* ortalama */
+  margin-right: auto;      /* ortalama */
+}
 
     .tests h2 {
       margin: 0 0 6px 0;
@@ -428,14 +431,15 @@
       margin-top: 4px;
     }
 
-    .test-option {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 2px;
-      font-size: 0.83rem;
-      color: var(--text-sub);
-    }
+.test-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;  /* 🔧 əsas düzəliş */
+  gap: 8px;                     /* bir az geniş boşluq */
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--text-sub);
+}
 
     .test-option input {
       margin: 0;
@@ -1996,6 +2000,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
