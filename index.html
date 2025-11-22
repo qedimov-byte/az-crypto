@@ -706,6 +706,67 @@ input[type="text"] {
   background: var(--area-bg);
   color: var(--text-main);
 }
+/* Mistik 10 şifrə oyunu blokları */
+.dark-game {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-soft);
+}
+
+.dark-game h2 {
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+  color: var(--accent1);
+}
+
+.puzzle-step {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--chip-bg);
+  border: 1px solid var(--chip-border);
+  box-sizing: border-box;
+}
+
+.puzzle-step .puzzle-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-sub);
+  margin-bottom: 4px;
+}
+
+.puzzle-step .puzzle-cipher {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.dark-answer-input {
+  margin-top: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--area-bg);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+/* Yanlış cavabda yüngül “shake” effekti üçün (optional) */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+.dark-answer-input.shake {
+  animation: shake 0.3s ease;
+}
 
     
   </style>
@@ -835,6 +896,25 @@ input[type="text"] {
         hərf uzunluğunda əlifba yazmağınız lazımdır.
       </div>
     </div>
+
+    <div class="dark-game">
+  <h2>🌒 Mistik hüquq oyunu · 10 şifrə</h2>
+  <p class="helper">
+    Hər səviyyədə latınca qaranlıq bir ifadə, ipucu və gizli açar söz var. Doğru açar sözü yazanda
+    növbəti qapı açılır. Sonda isə xüsusi mesajı görəcəksən.
+  </p>
+
+  <!-- Buraya JS ilə səviyyələr əlavə olunacaq -->
+  <div id="darkGameSteps"></div>
+
+  <div id="darkFinalBox" class="secret-box" style="display:none; margin-top:14px;">
+    <div class="secret-label">SON AÇILAN MESAJ</div>
+    <div id="darkFinalText" class="secret-text"></div>
+    <div class="helper small" style="margin-top:4px;">
+      Bu final mesajını müəllifə göndərən oxuculara kitab hədiyyə ediləcək.
+    </div>
+  </div>
+</div>
 
     <div class="secret">
       <h2>Müəllifdən gizli mesaj · 1-ci səviyyə</h2>
@@ -1624,6 +1704,19 @@ input[type="text"] {
       level2Wrapper.style.display = "block";
     });
 
+function normalizeAnswer(str) {
+  return (str || "")
+    .trim()
+    .toLowerCase()
+    .replace(/ə/g, "e")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ç/g, "c");
+}
+
+    
     showSecondSecretBtn.addEventListener("click", () => {
   const norm = (v) => (v || "").trim().toLowerCase();
 
@@ -1701,6 +1794,33 @@ const stepPuzzles = [
   }
 ];
 
+// 🔮 Mistik oyun üçün 10 səviyyəlik şifrə massiv-i
+const darkChapters = [
+  {
+    id: 1,
+    cipher: "LUX IN TENEBRIS",
+    hint: "İşıq bəzən yalnız qaranlığın içində görünür.",
+    answer: "lux",                     // açar söz
+    latin: "Lux in tenebris"           // tam aforizm
+  },
+  {
+    id: 2,
+    cipher: "VERITAS OBSCURA",
+    hint: "Həqiqət hər zaman aydın səthdə olmur.",
+    answer: "veritas",
+    latin: "Veritas obscura est"
+  },
+  {
+    id: 3,
+    cipher: "LEX INIUSTA NON EST LEX",
+    hint: "Bu ifadə ədalətsiz qanunun mahiyyəti barədədir.",
+    answer: "lex",
+    latin: "Lex iniusta non est lex"
+  },
+  // ... buradan 10-cu səviyyəyə qədər özün davam etdirə bilərsən
+];
+
+    
 // HTML-i dinamik qururuq
 function renderStepPuzzles() {
   const container = document.getElementById("puzzleSteps");
@@ -1765,13 +1885,17 @@ function checkStepPuzzle(stepId) {
 
     
     function init() {
-      setTheme("golden");
-      prepareSecret();
-      
-      renderTestQuestions();
-    }
+  setTheme("golden");
+  prepareSecret();
+  renderPuzzles();
+  renderTestQuestions();
 
-    init();
+  // 🔮 Mistik 10 şifrəlik oyun:
+  renderDarkGame();
+  attachDarkHandlers();
+}
+
+init();
     // ——————— TAPMACA SİSTEMİ ———————
 
 // Səviyyələr ardıcıldır — cavab düz olduqca növbətisi açılır
@@ -1830,6 +1954,109 @@ function renderPuzzleSteps() {
   });
 }
 
+function renderDarkGame() {
+  const wrapper = document.getElementById("darkGameSteps");
+  if (!wrapper) return;
+  wrapper.innerHTML = "";
+
+  darkChapters.forEach((ch, index) => {
+    const step = document.createElement("div");
+    step.className = "puzzle-step";
+    step.dataset.step = ch.id;
+
+    // İlk səviyyə görünsün, qalanları gizli
+    if (index > 0) {
+      step.style.display = "none";
+    }
+
+    step.innerHTML = `
+      <div class="puzzle-title">Səviyyə ${ch.id}</div>
+      <div class="puzzle-cipher">Şifrəli ifadə: <strong>${ch.cipher}</strong></div>
+      <div class="helper small">İpucu: ${ch.hint}</div>
+
+      <input
+        type="text"
+        class="dark-answer-input"
+        data-step="${ch.id}"
+        placeholder="Açar sözü yaz..."
+      />
+
+      <button
+        type="button"
+        class="secondary dark-check-btn"
+        data-step="${ch.id}"
+        style="margin-top:6px;"
+      >
+        Yoxla
+      </button>
+
+      <div class="helper small" id="darkMsg-${ch.id}" style="margin-top:4px;"></div>
+    `;
+
+    wrapper.appendChild(step);
+  });
+}
+
+ function attachDarkHandlers() {
+  const buttons = document.querySelectorAll(".dark-check-btn");
+  if (!buttons.length) return;
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const stepId = parseInt(btn.dataset.step, 10);
+      const input = document.querySelector(`.dark-answer-input[data-step="${stepId}"]`);
+      const msgBox = document.getElementById(`darkMsg-${stepId}`);
+      const chapter = darkChapters.find((ch) => ch.id === stepId);
+
+      if (!input || !msgBox || !chapter) return;
+
+      const userVal = normalizeAnswer(input.value);
+      const correctVal = normalizeAnswer(chapter.answer);
+
+      if (!userVal) {
+        msgBox.textContent = "Əvvəl açar sözü yaz.";
+        msgBox.style.color = "#f97316";
+        return;
+      }
+
+      if (userVal === correctVal) {
+        // ✅ Düzgün cavab
+        msgBox.textContent = "Düzdür. Növbəti qapı açıldı...";
+        msgBox.style.color = "#22c55e";
+
+        input.disabled = true;
+        btn.disabled = true;
+
+        // Növbəti səviyyəni aç
+        const nextStep = document.querySelector(`.puzzle-step[data-step="${stepId + 1}"]`);
+        if (nextStep) {
+          nextStep.style.display = "block";
+        } else {
+          // Son səviyyə idisə
+          showDarkFinal();
+        }
+      } else {
+        // ❌ Yanlış cavab
+        msgBox.textContent = "Bu açar sözü bir az da düşün. İpucuna yenidən bax.";
+        msgBox.style.color = "#f97316";
+
+        input.classList.add("shake");
+        setTimeout(() => input.classList.remove("shake"), 400);
+      }
+    });
+  });
+}
+   
+function showDarkFinal() {
+  const box = document.getElementById("darkFinalBox");
+  const text = document.getElementById("darkFinalText");
+  if (!box || !text) return;
+
+  text.textContent = "Şifrələri açdıqca sözləri tapdın; düşüncəni açdıqca ədaləti tapacaqsan.";
+  box.style.display = "block";
+}
+
+    
 function checkPuzzle(i) {
   const val = document.getElementById("answer" + i).value.trim().toLowerCase();
   const correct = puzzleLevels[i].answer.toLowerCase();
@@ -1858,41 +2085,4 @@ renderPuzzleSteps();
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
