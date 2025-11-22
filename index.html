@@ -2017,35 +2017,73 @@ function renderStrengthHistory(list) {
   } catch (e) {}
 })();
 
-// sadə “Mesajı təkmilləşdir” funksiyası
-function suggestImprovedMessage(text) {
-  let t = text.trim();
-  if (!t) {
-    return "Əvvəl qısa da olsa, nə hiss etdiyini və nə demək istədiyini yaz.";
+function suggestImprovedMessage(text, analysis) {
+  let raw = (text || "").trim();
+  if (!raw) {
+    return "Əvvəl qısa da olsa, nə hiss etdiyini və nə demək istədiyini yaz. Sonra birlikdə onu daha güclü formaya salaq.";
   }
 
-  if (t.length < 15) {
-    return (
-      "Mesajını bir az da aç: nəyi, kim üçün və niyə istədiyini bir cümlədə daha aydın yaz. Məsələn: “" +
-      t +
-      ' – bunu ədalətə daha yaxınlaşmaq üçün etmək istəyirəm.”'
-    );
+  const lower = raw.toLowerCase();
+
+  // Baş hərfi böyüt
+  raw = raw.replace(/^(\s*[a-zəöüğçıi])/i, (m) => m.toUpperCase());
+
+  // Sonda . ! ? yoxdursa, nöqtə əlavə et
+  if (!/[.!?]$/.test(raw)) {
+    raw += ".";
   }
 
-  if (!/[.!?]$/.test(t)) t += ".";
+  // Əlavə ədalət/hüquq vurğusu
+  let tail = "";
+  if (/(ədalət|adalet|hüquq|huquq|azadlıq|azadliq|vicdan|insan)/i.test(lower)) {
+    tail =
+      " Bu fikri konkret bir situasiya, insan və nəticə ilə bağlasan, mesajın təsiri daha da güclənər.";
+  } else {
+    tail =
+      " Mesajına hansı dəyərləri (məsələn, ədalət, azadlıq, vicdan) qorumaq istədiyini də əlavə etsən, daha mənalı görünəcək.";
+  }
 
-  t = t.replace(/\b(yaxşı)\b/gi, "daha güclü və aydın");
-  t = t.replace(/\b(istəyirəm)\b/gi, "istəyirəm, çünki bu mənim üçün dəyərdir");
+  // Güc balına görə qısa şərh
+  let comment = "";
+  if (analysis) {
+    if (analysis.score >= 75) {
+      comment =
+        " Ümumilikdə mesajın artıq güclüdür, indi onu bir qədər konkretləşdirmək kifayətdir.";
+    } else if (analysis.score >= 50) {
+      comment =
+        " Bir az daha emosional və vizual ifadələr əlavə etsən, mesaj daha təsirli ola bilər.";
+    } else {
+      comment =
+        " Hal-hazırda daha çox analitik səslənir; hiss və məqsəd qatını gücləndirmək üçün bir misal və ya obraz əlavə etməyə çalış.";
+    }
+  }
 
-  return t;
+  return (
+    "Mesajının daha gücləndirilmiş variantı belə görünə bilər:\n\n" +
+    raw +
+    tail +
+    comment
+  );
 }
+
 
 improveBtn.addEventListener("click", () => {
   const text = strengthInput.value || "";
-  const improved = suggestImprovedMessage(text);
+  if (!text.trim()) {
+    improvedMessageEl.textContent =
+      "Əvvəl yuxarıdakı xana qısa bir mesaj yaz, sonra onu birlikdə gücləndirək.";
+    improvedMessageEl.style.display = "block";
+    return;
+  }
+
+  // hazır qiymətləndirmə funksiyasını istifadə edirik
+  const res = evaluateStrength(text);
+  const improved = suggestImprovedMessage(text, res);
+
   improvedMessageEl.textContent = improved;
   improvedMessageEl.style.display = "block";
 });
+
 
     
 
@@ -2461,6 +2499,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
