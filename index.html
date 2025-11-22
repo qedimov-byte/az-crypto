@@ -1972,6 +1972,9 @@ function renderDarkGame() {
 
       if (!input || !msgBox || !chapter) return;
 
+      // ✅ Hansı blokda olduğumuzu tapırıq
+      const stepEl = btn.closest(".puzzle-step");
+
       const userVal = normalizeAnswer(input.value);
       const correctVal = normalizeAnswer(chapter.answer);
 
@@ -1989,12 +1992,21 @@ function renderDarkGame() {
         input.disabled = true;
         btn.disabled = true;
 
-        // Növbəti səviyyəni aç
+        // 🔁 Növbəti səviyyəni tap
         const nextStep = document.querySelector(`.puzzle-step[data-step="${stepId + 1}"]`);
+
         if (nextStep) {
+          // Əvvəl indiki bloku gizlə
+          if (stepEl) {
+            stepEl.style.display = "none";
+          }
+          // Sonra növbəti bloku göstər – onun yerinə “qalxacaq”
           nextStep.style.display = "block";
         } else {
-          // Son səviyyə idisə
+          // Sonuncu idisə → final mesajı göstər
+          if (stepEl) {
+            stepEl.style.display = "none";
+          }
           showDarkFinal();
         }
       } else {
@@ -2008,6 +2020,7 @@ function renderDarkGame() {
     });
   });
 }
+
    
 function showDarkFinal() {
   const box = document.getElementById("darkFinalBox");
@@ -2044,6 +2057,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
