@@ -1183,12 +1183,7 @@ input[type="text"] {
     sözlərə görə təxmini emosional güc baxımından qiymətləndirəcək.
   </p>
 
-  <div class="strength">
-  <h2>Mesajın gücü</h2>
-  <p class="helper">
-    Buraya şifrələnmiş və ya adi bir mesaj yaz – alət onu uzunluq, dinamika və açar
-    sözlərə görə təxmini emosional güc baxımından qiymətləndirəcək.
-  </p>
+  
 
   <div class="strength-row">
     <input
@@ -1882,7 +1877,6 @@ function finishTest() {
   testFinalBox.style.display = "block";
 }
 
-
 // ===== Mesaj gücü / motivasiya generatoru =====
 const msgLengthEl = document.getElementById("msgLength");
 const msgMoodEl = document.getElementById("msgMood");
@@ -1891,7 +1885,6 @@ const toneIconEl = document.getElementById("toneIcon");
 const strengthTextEl = document.getElementById("strengthText");
 const keywordsBox = document.getElementById("keywordsBox");
 const strengthHistoryEl = document.getElementById("strengthHistory");
-// strengthInput, strengthBtn, strengthResultEl, improveBtn, improvedMessageEl artıq yuxarıda elan olunub
 
 // yazdıqca simvol sayı
 strengthInput.addEventListener("input", () => {
@@ -2024,7 +2017,7 @@ strengthBtn.addEventListener("click", () => {
   saveStrengthHistory(text, res);
 });
 
-// motivasiya mesajı generatoru
+// motivasiya mesajı generatoru – YALNIZ BİR DƏFƏ
 function generateMotivationMessage(text, analysis) {
   const raw = (text || "").trim();
   const lower = raw.toLowerCase();
@@ -2077,11 +2070,11 @@ improveBtn.addEventListener("click", () => {
   const res = evaluateStrength(text);
   const motText = generateMotivationMessage(text, res);
 
-  improvedMessageEl.textContent = motText;
+  improvedMessageEl.innerHTML = motText;
   improvedMessageEl.style.display = "block";
 });
 
-// history
+// localStorage-də son 5 nəticə
 function saveStrengthHistory(text, res) {
   const item = {
     msg: text.trim().slice(0, 80),
@@ -2130,147 +2123,6 @@ function renderStrengthHistory(list) {
   } catch (e) {}
 })();
 
-
-
-    
-function generateMotivationMessage(text, analysis) {
-  const raw = (text || "").trim();
-  const lower = raw.toLowerCase();
-
-  const hasJusticeWords = /(ədalət|adalet|hüquq|huquq|azadlıq|azadliq|vicdan|insan)/i.test(lower);
-
-  // Bal üzrə ümumi ton
-  let toneIntro = "";
-  if (analysis.score >= 75) {
-    toneIntro =
-      "Bu cümlədə artıq güclü enerji var – sənin içində olan “niyə mübarizə aparıram?” hissini oyadır.";
-  } else if (analysis.score >= 50) {
-    toneIntro =
-      "Bu mesaj sakit və düşüncəlidir – bir az daha emosiyanı bəlli etsən, çox güclü şüar ola bilər.";
-  } else {
-    toneIntro =
-      "Hazırkı cümlən daha çox analitikdir. Bu da önəmlidir – amma içindəki həqiqi ehtiyac və hissi də sözə çevirməyə dəyər.";
-  }
-
-  // Hüquq/ədalət vurğusu
-  let lawNote = "";
-  if (hasJusticeWords) {
-    lawNote =
-      " Sən artıq fikrini hüquq və ədalət dili ilə ifadə edirsən. Bu, gələcək hüquqşünas üçün çox böyük başlanğıcdır.";
-  } else {
-    lawNote =
-      " Əgər bu cümləyə ədalət, azadlıq, vicdan və ya insan ləyaqəti kimi sözlər əlavə etsən, hüquqi-mənəvi çəkisi daha da artar.";
-  }
-
-  // Özünü ikinci şəxsə çevirən motivasiya nüvəsi
-  const coreMessage = raw
-    ? `Sən bu an belə deyirsən: “${raw}”\n\nBu cümlə kiçik görünsə də, əslində içindəki bir həqiqəti üzə çıxarır: sən susmaq yox, mövqe bildirmək istəyirsən. Hər dəfə yorulanda bu fikri yenidən oxu və özünə xatırlat ki, sənin səsin, düşüncən və ədalət hissin dəyərli və lazımlıdır.`
-    : "Hələ heç nə yazmamısan, amma düşünürsənsə, bu artıq başlanğıcdır. Bir cümlə ilə başla – qalanını hüquq və ədalət yolunda addım-addım quracağıq.";
-
-  return `
-<strong>Motivasiya mesajın</strong>\n
-${coreMessage}\n
-${toneIntro}${lawNote}\n
-Unutma: hüququ seçmək sadəcə ixtisas deyil, sənin ədalətə münasibətin və həyat mövqeyindir. Bu cümlə o yolun ilk işarəsi ola bilər.
-  `;
-}
-
-
-    
-// localStorage-də son 5 nəticə
-function saveStrengthHistory(text, res) {
-  const item = {
-    msg: text.trim().slice(0, 80),
-    score: res.score,
-    time: new Date().toLocaleTimeString("az-Latn-AZ", {
-      hour: "2-digit",
-      minute: "2-digit"
-    })
-  };
-
-  let list = [];
-  try {
-    list = JSON.parse(localStorage.getItem("msgStrengthHistory") || "[]");
-  } catch (e) {
-    list = [];
-  }
-
-  list.unshift(item);
-  list = list.slice(0, 5);
-  localStorage.setItem("msgStrengthHistory", JSON.stringify(list));
-  renderStrengthHistory(list);
-}
-
-function renderStrengthHistory(list) {
-  if (!strengthHistoryEl) return;
-  if (!list || !list.length) {
-    strengthHistoryEl.innerHTML = "";
-    return;
-  }
-
-  strengthHistoryEl.innerHTML =
-    '<div class="helper">Son qiymətləndirmələr:</div>' +
-    list
-      .map(
-        (i) =>
-          `<div class="history-item"><span>${i.time}</span> · <strong>${i.score}/100</strong> – ${i.msg}</div>`
-      )
-      .join("");
-}
-
-// səhifə açılarkən tarixçəni yüklə (init içində çağırmaq da olar)
-(function loadStrengthHistoryOnStart() {
-  try {
-    const list = JSON.parse(localStorage.getItem("msgStrengthHistory") || "[]");
-    renderStrengthHistory(list);
-  } catch (e) {}
-})();
-
-
-
-  // Əlavə ədalət/hüquq vurğusu
-  let tail = "";
-  if (/(ədalət|adalet|hüquq|huquq|azadlıq|azadliq|vicdan|insan)/i.test(lower)) {
-    tail =
-      " Bu fikri konkret bir situasiya, insan və nəticə ilə bağlasan, mesajın təsiri daha da güclənər.";
-  } else {
-    tail =
-      " Mesajına hansı dəyərləri (məsələn, ədalət, azadlıq, vicdan) qorumaq istədiyini də əlavə etsən, daha mənalı görünəcək.";
-  }
-
-  // Güc balına görə qısa şərh
-  let comment = "";
-  if (analysis) {
-    if (analysis.score >= 75) {
-      comment =
-        " Ümumilikdə mesajın artıq güclüdür, indi onu bir qədər konkretləşdirmək kifayətdir.";
-    } else if (analysis.score >= 50) {
-      comment =
-        " Bir az daha emosional və vizual ifadələr əlavə etsən, mesaj daha təsirli ola bilər.";
-    } else {
-      comment =
-        " Hal-hazırda daha çox analitik səslənir; hiss və məqsəd qatını gücləndirmək üçün bir misal və ya obraz əlavə etməyə çalış.";
-    }
-  }
-
-  return (
-    "Mesajının daha gücləndirilmiş variantı belə görünə bilər:\n\n" +
-    raw +
-    tail +
-    comment
-  );
-}
-
-
-
-
-  // hazır qiymətləndirmə funksiyasını istifadə edirik
-  const res = evaluateStrength(text);
-  const improved = suggestImprovedMessage(text, res);
-
-  improvedMessageEl.textContent = improved;
-  improvedMessageEl.style.display = "block";
-});
 
 
     
@@ -2687,6 +2539,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
