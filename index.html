@@ -499,6 +499,18 @@
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
+.motivation-box {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--chip-border);
+  background: rgba(15, 23, 42, 0.85);
+  color: var(--text-main);
+  white-space: pre-wrap;
+}
+
+    
 .strength-result.visible {
   display: block;
   opacity: 1;
@@ -1171,17 +1183,19 @@ input[type="text"] {
     sözlərə görə təxmini emosional güc baxımından qiymətləndirəcək.
   </p>
 
-  <!-- Input + düymə -->
   <div class="strength-row">
-    <input
-      id="strengthInput"
-      type="text"
-      placeholder="Məsələn: Ədalət uğrunda susmaq olmaz..."
-    />
-    <button id="strengthBtn" type="button" class="secondary">
-      Qiymətləndir
-    </button>
-  </div>
+  <input
+    id="strengthInput"
+    type="text"
+    placeholder="Məsələn: Ədalət uğrunda susmaq olmaz..."
+  />
+  <button id="strengthBtn" type="button" class="secondary">Qiymətləndir</button>
+  <button id="improveBtn" type="button" class="secondary">Motivasiya mesajı yarad</button>
+</div>
+
+<div id="strengthResult" class="strength-result"></div>
+<div id="improvedMessage" class="motivation-box" style="display:none;"></div>
+
 
   <!-- Simvol sayı + ton -->
   <div class="strength-meta">
@@ -1411,6 +1425,9 @@ input[type="text"] {
     const strengthInput = document.getElementById("strengthInput");
     const strengthBtn = document.getElementById("strengthBtn");
     const strengthResultEl = document.getElementById("strengthResult");
+    const improveBtn = document.getElementById("improveBtn");
+const improvedMessageEl = document.getElementById("improvedMessage");
+
 
     const themeGoldenBtn = document.getElementById("themeGolden");
     const themeBlueBtn = document.getElementById("themeBlue");
@@ -1968,6 +1985,69 @@ strengthBtn.addEventListener("click", () => {
   saveStrengthHistory(text, res);
 });
 
+improveBtn.addEventListener("click", () => {
+  const text = strengthInput.value || "";
+
+  if (!text.trim()) {
+    improvedMessageEl.textContent =
+      "Əvvəl yuxarıdakı xanaya sənin üçün önəmli olan qısa bir fikir yaz – sonra onu motivasiya mesajına çevirək.";
+    improvedMessageEl.style.display = "block";
+    return;
+  }
+
+  const res = evaluateStrength(text);
+  const motText = generateMotivationMessage(text, res);
+
+  improvedMessageEl.textContent = motText;
+  improvedMessageEl.style.display = "block";
+});
+
+
+    
+function generateMotivationMessage(text, analysis) {
+  const raw = (text || "").trim();
+  const lower = raw.toLowerCase();
+
+  const hasJusticeWords = /(ədalət|adalet|hüquq|huquq|azadlıq|azadliq|vicdan|insan)/i.test(lower);
+
+  // Bal üzrə ümumi ton
+  let toneIntro = "";
+  if (analysis.score >= 75) {
+    toneIntro =
+      "Bu cümlədə artıq güclü enerji var – sənin içində olan “niyə mübarizə aparıram?” hissini oyadır.";
+  } else if (analysis.score >= 50) {
+    toneIntro =
+      "Bu mesaj sakit və düşüncəlidir – bir az daha emosiyanı bəlli etsən, çox güclü şüar ola bilər.";
+  } else {
+    toneIntro =
+      "Hazırkı cümlən daha çox analitikdir. Bu da önəmlidir – amma içindəki həqiqi ehtiyac və hissi də sözə çevirməyə dəyər.";
+  }
+
+  // Hüquq/ədalət vurğusu
+  let lawNote = "";
+  if (hasJusticeWords) {
+    lawNote =
+      " Sən artıq fikrini hüquq və ədalət dili ilə ifadə edirsən. Bu, gələcək hüquqşünas üçün çox böyük başlanğıcdır.";
+  } else {
+    lawNote =
+      " Əgər bu cümləyə ədalət, azadlıq, vicdan və ya insan ləyaqəti kimi sözlər əlavə etsən, hüquqi-mənəvi çəkisi daha da artar.";
+  }
+
+  // Özünü ikinci şəxsə çevirən motivasiya nüvəsi
+  const coreMessage = raw
+    ? `Sən bu an belə deyirsən: “${raw}”\n\nBu cümlə kiçik görünsə də, əslində içindəki bir həqiqəti üzə çıxarır: sən susmaq yox, mövqe bildirmək istəyirsən. Hər dəfə yorulanda bu fikri yenidən oxu və özünə xatırlat ki, sənin səsin, düşüncən və ədalət hissin dəyərli və lazımlıdır.`
+    : "Hələ heç nə yazmamısan, amma düşünürsənsə, bu artıq başlanğıcdır. Bir cümlə ilə başla – qalanını hüquq və ədalət yolunda addım-addım quracağıq.";
+
+  return `
+<strong>Motivasiya mesajın</strong>\n
+${coreMessage}\n
+${toneIntro}${lawNote}\n
+Unutma: hüququ seçmək sadəcə ixtisas deyil, sənin ədalətə münasibətin və həyat mövqeyindir. Bu cümlə o yolun ilk işarəsi ola bilər.
+  `;
+}
+
+
+    
 // localStorage-də son 5 nəticə
 function saveStrengthHistory(text, res) {
   const item = {
@@ -2499,6 +2579,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
