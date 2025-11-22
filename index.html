@@ -1795,30 +1795,80 @@ const stepPuzzles = [
 ];
 
 // 🔮 Mistik oyun üçün 10 səviyyəlik şifrə massiv-i
+// 🔮 Mistik oyun üçün 10 səviyyəlik latınca aforizm massiv-i
 const darkChapters = [
   {
     id: 1,
-    cipher: "LUX IN TENEBRIS",
-    hint: "İşıq bəzən yalnız qaranlığın içində görünür.",
-    answer: "lux",                     // açar söz
-    latin: "Lux in tenebris"           // tam aforizm
+    cipher: "LUX IN TENEBRIS LUCET",
+    hint: "Bəzən ən zəif işıq belə yalnız qaranlığın içində görünür. Açar söz: içində parlayan şey.",
+    answer: "lux",
+    latin: "Lux in tenebris lucet"
   },
   {
     id: 2,
-    cipher: "VERITAS OBSCURA",
-    hint: "Həqiqət hər zaman aydın səthdə olmur.",
+    cipher: "VERITAS OBSCURA EST",
+    hint: "Həqiqət çox vaxt aydın səthdə deyil, gizli qatların arxasında gizlənir. Açar söz: həqiqətin özü.",
     answer: "veritas",
     latin: "Veritas obscura est"
   },
   {
     id: 3,
     cipher: "LEX INIUSTA NON EST LEX",
-    hint: "Bu ifadə ədalətsiz qanunun mahiyyəti barədədir.",
+    hint: "Ədalətsiz qanun həqiqi qanun deyil deyən məşhur prinsip. Açar söz: bu prinsipin mərkəzində duran anlayış.",
     answer: "lex",
     latin: "Lex iniusta non est lex"
   },
-  // ... buradan 10-cu səviyyəyə qədər özün davam etdirə bilərsən
+  {
+    id: 4,
+    cipher: "FIAT IUSTITIA, PEREAT MUNDUS",
+    hint: "Qoy ədalət yerini tapsın, dünya da dağılmalı olsa belə. Açar söz: bu çağırışın mərkəzində duran qüvvə.",
+    answer: "iustitia",
+    latin: "Fiat iustitia, pereat mundus"
+  },
+  {
+    id: 5,
+    cipher: "DURA LEX, SED LEX",
+    hint: "Qanun bəzən sərtdir, amma yenə də qanundur. Açar söz: bu ifadədə sərt adlandırılan şey.",
+    answer: "lex",
+    latin: "Dura lex, sed lex"
+  },
+  {
+    id: 6,
+    cipher: "AUDI ALTERAM PARTEM",
+    hint: "Hükm verməzdən əvvəl digər tərəfi də dinlə deyən prinsip. Açar söz: hər zaman dinlənməli olan bu “digər tərəf”.",
+    answer: "alteram",
+    latin: "Audi alteram partem"
+  },
+  {
+    id: 7,
+    cipher: "IN DUBIO PRO REO",
+    hint: "Şübhə varsa, bu kimin xeyrinə yozulur? Açar söz: bu prinsipin mərkəzində olan şübhə halı.",
+    answer: "dubio",
+    latin: "In dubio pro reo"
+  },
+  {
+    id: 8,
+    cipher: "NEMO IUDEX IN CAUSA SUA",
+    hint: "Heç kəs öz işi üzrə hakim ola bilməz. Açar söz: bu prinsipi başlayan söz.",
+    answer: "nemo",
+    latin: "Nemo iudex in causa sua"
+  },
+  {
+    id: 9,
+    cipher: "SILENTIUM EST ARGUMENTUM",
+    hint: "Bəzən susmaq da mövqe seçməkdir. Açar söz: bu cümlədə dəlilə çevrilən hal.",
+    answer: "silentium",
+    latin: "Silentium est argumentum"
+  },
+  {
+    id: 10,
+    cipher: "UBI IUS, IBI REMEDIUM",
+    hint: "Harada hüquq varsa, orada vasitə də olmalıdır. Açar söz: hüququn varlığını bildirən bu qısa söz.",
+    answer: "ius",
+    latin: "Ubi ius, ibi remedium"
+  }
 ];
+
 
     
 // HTML-i dinamik qururuq
@@ -2085,4 +2135,5 @@ renderPuzzleSteps();
   </script>
 </body>
 </html>
+
 
