@@ -908,12 +908,8 @@ input[type="text"] {
   <div id="darkGameSteps"></div>
 
   <div id="darkFinalBox" class="secret-box" style="display:none; margin-top:14px;">
-    <div class="secret-label">SON AÇILAN MESAJ</div>
-    <div id="darkFinalText" class="secret-text"></div>
-    <div class="helper small" style="margin-top:4px;">
-      Bu final mesajını müəllifə ilk göndərənə kitab hədiyyə ediləcək.
-    </div>
-  </div>
+  <div class="secret-label">SON AÇILAN MESAJ</div>
+  <div id="darkFinalText" class="secret-text"></div>
 </div>
 
     <div class="secret">
@@ -1929,7 +1925,9 @@ const puzzleLevels = [
 ];
 
 // Final söz
-const finalPuzzleWord = "Şifrələri açdıqca sözləri tapdın; düşüncəni açdıqca ədaləti tapacaqsan.";
+const finalPuzzleWord =
+  "Hər tapdığın söz bir həqiqəti oyatdı: ədalət kənarda yox, sənin içində başlayır.<br>" +
+  "Bu mətni müəllifə ilk göndərənə kitab hədiyyə ediləcək.";
 
 function renderPuzzleSteps() {
   const wrapper = document.getElementById("puzzleSteps");
@@ -2066,7 +2064,9 @@ function showDarkFinal() {
   const text = document.getElementById("darkFinalText");
   if (!box || !text) return;
 
-  text.textContent = "Şifrələri açdıqca sözləri tapdın; düşüncəni açdıqca ədaləti tapacaqsan.";
+  text.innerHTML =
+    "Hər tapdığın söz bir həqiqəti oyatdı: ədalət kənarda yox, sənin içində başlayır.<br>" +
+    "Bu mətni müəllifə ilk göndərənə kitab hədiyyə ediləcək.";
   box.style.display = "block";
 }
 
@@ -2083,7 +2083,7 @@ function checkPuzzle(i) {
       document.getElementById("step" + (i + 1)).style.display = "block";
     } else {
       // bütün tapmacalar bitdi → final söz
-      document.getElementById("finalPuzzleWord").textContent = finalPuzzleWord;
+      document.getElementById("finalPuzzleWord").innerHTML = finalPuzzleWord;
       document.getElementById("finalPuzzleBox").style.display = "block";
     }
   } else {
@@ -2096,6 +2096,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
