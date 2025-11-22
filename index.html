@@ -1183,18 +1183,61 @@ input[type="text"] {
     sözlərə görə təxmini emosional güc baxımından qiymətləndirəcək.
   </p>
 
+  <div class="strength">
+  <h2>Mesajın gücü</h2>
+  <p class="helper">
+    Buraya şifrələnmiş və ya adi bir mesaj yaz – alət onu uzunluq, dinamika və açar
+    sözlərə görə təxmini emosional güc baxımından qiymətləndirəcək.
+  </p>
+
   <div class="strength-row">
-  <input
-    id="strengthInput"
-    type="text"
-    placeholder="Məsələn: Ədalət uğrunda susmaq olmaz..."
-  />
-  <button id="strengthBtn" type="button" class="secondary">Qiymətləndir</button>
-  <button id="improveBtn" type="button" class="secondary">Motivasiya mesajı yarat</button>
+    <input
+      id="strengthInput"
+      type="text"
+      placeholder="Məsələn: Ədalət uğrunda susmaq olmaz..."
+    />
+    <button id="strengthBtn" type="button" class="secondary">Qiymətləndir</button>
+  </div>
+
+  <!-- Simvol sayı + ton -->
+  <div class="strength-meta">
+    <span id="msgLength">0 simvol</span>
+    <span id="msgMood">Ton: –</span>
+  </div>
+
+  <!-- Proqres bar -->
+  <div class="strength-bar">
+    <div class="strength-fill" id="strengthFill"></div>
+  </div>
+
+  <!-- Nəticə kartı + motivasiya generatoru -->
+  <div id="strengthResult" class="strength-result result-box">
+    <div class="tone-icon" id="toneIcon">💬</div>
+
+    <div id="strengthText"></div>
+
+    <div id="keywordsBox" class="helper" style="margin-top:6px;"></div>
+
+    <button
+      id="improveBtn"
+      type="button"
+      class="secondary small-btn"
+      style="margin-top:6px;"
+    >
+      Motivasia mesajı yarad
+    </button>
+
+    <div
+      id="improvedMessage"
+      class="motivation-box"
+      style="margin-top:4px; display:none;"
+    ></div>
+  </div>
+
+  <!-- Son 5 nəticənin tarixi -->
+  <div id="strengthHistory" class="strength-history"></div>
 </div>
 
-<div id="strengthResult" class="strength-result"></div>
-<div id="improvedMessage" class="motivation-box" style="display:none;"></div>
 
 
   <!-- Simvol sayı + ton -->
@@ -1840,16 +1883,15 @@ function finishTest() {
 }
 
 
-// Mesaj gücü elementləri
+// ===== Mesaj gücü / motivasiya generatoru =====
 const msgLengthEl = document.getElementById("msgLength");
 const msgMoodEl = document.getElementById("msgMood");
 const strengthFill = document.getElementById("strengthFill");
 const toneIconEl = document.getElementById("toneIcon");
 const strengthTextEl = document.getElementById("strengthText");
 const keywordsBox = document.getElementById("keywordsBox");
-const improveBtn = document.getElementById("improveBtn");
-const improvedMessageEl = document.getElementById("improvedMessage");
 const strengthHistoryEl = document.getElementById("strengthHistory");
+// strengthInput, strengthBtn, strengthResultEl, improveBtn, improvedMessageEl artıq yuxarıda elan olunub
 
 // yazdıqca simvol sayı
 strengthInput.addEventListener("input", () => {
@@ -1908,7 +1950,6 @@ function evaluateStrength(text) {
       " Xüsusilə ədalət, insan və hüquqla bağlı açar sözlər mesajın dəyər yönümlü təsirini gücləndirir.";
   }
 
-  // ton + ikon
   let tone = "Sakit";
   let icon = "🧊";
   if (score >= 75) {
@@ -1922,7 +1963,6 @@ function evaluateStrength(text) {
     icon = "💬";
   }
 
-  // açar söz ruhu
   const keywordsMap = [
     { word: "ədalət", tag: "ədalət / hüquq" },
     { word: "hüquq", tag: "hüquq" },
@@ -1961,7 +2001,6 @@ strengthBtn.addEventListener("click", () => {
   }
 
   strengthResultEl.style.display = "block";
-  // kiçik delay lazım deyil, amma animasiya üçün class ayrıca
   requestAnimationFrame(() => {
     strengthResultEl.classList.add("visible");
   });
@@ -1985,6 +2024,46 @@ strengthBtn.addEventListener("click", () => {
   saveStrengthHistory(text, res);
 });
 
+// motivasiya mesajı generatoru
+function generateMotivationMessage(text, analysis) {
+  const raw = (text || "").trim();
+  const lower = raw.toLowerCase();
+
+  const hasJusticeWords = /(ədalət|adalet|hüquq|huquq|azadlıq|azadliq|vicdan|insan)/i.test(lower);
+
+  let toneIntro = "";
+  if (analysis.score >= 75) {
+    toneIntro =
+      "Bu cümlədə artıq güclü enerji var – sənin içində olan “niyə mübarizə aparıram?” hissini oyadır.";
+  } else if (analysis.score >= 50) {
+    toneIntro =
+      "Bu mesaj sakit və düşüncəlidir – bir az daha emosiyanı bəlli etsən, çox güclü şüar ola bilər.";
+  } else {
+    toneIntro =
+      "Hazırkı cümlən daha çox analitikdir. Bu da önəmlidir – amma içindəki həqiqi ehtiyac və hissi də sözə çevirməyə dəyər.";
+  }
+
+  let lawNote = "";
+  if (hasJusticeWords) {
+    lawNote =
+      " Sən artıq fikrini hüquq və ədalət dili ilə ifadə edirsən. Bu, gələcək hüquqşünas üçün çox böyük başlanğıcdır.";
+  } else {
+    lawNote =
+      " Əgər bu cümləyə ədalət, azadlıq, vicdan və ya insan ləyaqəti kimi sözlər əlavə etsən, hüquqi-mənəvi çəkisi daha da artar.";
+  }
+
+  const coreMessage = raw
+    ? `Sən bu an belə deyirsən: “${raw}”\n\nBu cümlə kiçik görünsə də, əslində içindəki bir həqiqəti üzə çıxarır: sən susmaq yox, mövqe bildirmək istəyirsən. Hər dəfə yorulanda bu fikri yenidən oxu və özünə xatırlat ki, sənin səsin, düşüncən və ədalət hissin dəyərli və lazımlıdır.`
+    : "Hələ heç nə yazmamısan, amma düşünürsənsə, bu artıq başlanğıcdır. Bir cümlə ilə başla – qalanını hüquq və ədalət yolunda addım-addım quracağıq.";
+
+  return `
+<strong>Motivasiya mesajın</strong>\n
+${coreMessage}\n
+${toneIntro}${lawNote}\n
+Unutma: hüququ seçmək sadəcə ixtisas deyil, sənin ədalətə münasibətin və həyat mövqeyindir. Bu cümlə o yolun ilk işarəsi ola bilər.
+  `;
+}
+
 improveBtn.addEventListener("click", () => {
   const text = strengthInput.value || "";
 
@@ -2001,6 +2080,56 @@ improveBtn.addEventListener("click", () => {
   improvedMessageEl.textContent = motText;
   improvedMessageEl.style.display = "block";
 });
+
+// history
+function saveStrengthHistory(text, res) {
+  const item = {
+    msg: text.trim().slice(0, 80),
+    score: res.score,
+    time: new Date().toLocaleTimeString("az-Latn-AZ", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })
+  };
+
+  let list = [];
+  try {
+    list = JSON.parse(localStorage.getItem("msgStrengthHistory") || "[]");
+  } catch (e) {
+    list = [];
+  }
+
+  list.unshift(item);
+  list = list.slice(0, 5);
+  localStorage.setItem("msgStrengthHistory", JSON.stringify(list));
+  renderStrengthHistory(list);
+}
+
+function renderStrengthHistory(list) {
+  if (!strengthHistoryEl) return;
+  if (!list || !list.length) {
+    strengthHistoryEl.innerHTML = "";
+    return;
+  }
+
+  strengthHistoryEl.innerHTML =
+    '<div class="helper">Son qiymətləndirmələr:</div>' +
+    list
+      .map(
+        (i) =>
+          `<div class="history-item"><span>${i.time}</span> · <strong>${i.score}/100</strong> – ${i.msg}</div>`
+      )
+      .join("");
+}
+
+// səhifə açılarkən tarixçəni yüklə
+(function loadStrengthHistoryOnStart() {
+  try {
+    const list = JSON.parse(localStorage.getItem("msgStrengthHistory") || "[]");
+    renderStrengthHistory(list);
+  } catch (e) {}
+})();
+
 
 
     
@@ -2097,21 +2226,7 @@ function renderStrengthHistory(list) {
   } catch (e) {}
 })();
 
-function suggestImprovedMessage(text, analysis) {
-  let raw = (text || "").trim();
-  if (!raw) {
-    return "Əvvəl qısa da olsa, nə hiss etdiyini və nə demək istədiyini yaz. Sonra birlikdə onu daha güclü formaya salaq.";
-  }
 
-  const lower = raw.toLowerCase();
-
-  // Baş hərfi böyüt
-  raw = raw.replace(/^(\s*[a-zəöüğçıi])/i, (m) => m.toUpperCase());
-
-  // Sonda . ! ? yoxdursa, nöqtə əlavə et
-  if (!/[.!?]$/.test(raw)) {
-    raw += ".";
-  }
 
   // Əlavə ədalət/hüquq vurğusu
   let tail = "";
@@ -2147,14 +2262,7 @@ function suggestImprovedMessage(text, analysis) {
 }
 
 
-improveBtn.addEventListener("click", () => {
-  const text = strengthInput.value || "";
-  if (!text.trim()) {
-    improvedMessageEl.textContent =
-      "Əvvəl yuxarıdakı xana qısa bir mesaj yaz, sonra onu birlikdə gücləndirək.";
-    improvedMessageEl.style.display = "block";
-    return;
-  }
+
 
   // hazır qiymətləndirmə funksiyasını istifadə edirik
   const res = evaluateStrength(text);
@@ -2579,6 +2687,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
