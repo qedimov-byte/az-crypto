@@ -434,43 +434,111 @@
     }
 
     .strength {
-      margin-top: 22px;
-      padding-top: 14px;
-      border-top: 1px dashed var(--border-soft);
-    }
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-soft);
+}
 
-    .strength h2 {
-      margin: 0 0 6px 0;
-      font-size: 1.05rem;
-      color: var(--accent1);
-    }
+.strength h2 {
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+  color: var(--accent1);
+}
 
-    .strength-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 6px;
-      align-items: center;
-    }
+.strength-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin-top: 6px;
+  align-items: center;
+}
 
-    .strength-row input {
-      flex: 1;
-      min-width: 200px;
-    }
+.strength-row input {
+  flex: 1;
+  min-width: 180px;
+}
 
-    .strength-result {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid var(--border-soft);
-      background: rgba(15, 23, 42, 0.65);
-      display: none;
-    }
+/* yeni meta xətti */
+.strength-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  margin-top: 4px;
+}
 
-    .strength-score {
-      font-weight: 700;
-    }
+/* proqres bar */
+.strength-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+/* nəticə kartı */
+.strength-result {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-soft);
+  background: rgba(15, 23, 42, 0.75);
+  display: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.strength-result.visible {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.strength-score {
+  font-weight: 700;
+}
+
+/* ikon */
+.tone-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+/* “Mesajı təkmilləşdir” kiçik düyməsi */
+.small-btn {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+}
+
+/* tarixçə */
+.strength-history {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  border-top: 1px dashed var(--border-soft);
+  padding-top: 6px;
+}
+
+.strength-history .history-item {
+  margin-top: 3px;
+  opacity: 0.9;
+}
+
+.strength-history .history-item strong {
+  color: var(--accent1);
+}
+
 
     .about {
       margin-top: 18px;
@@ -1097,21 +1165,63 @@ input[type="text"] {
 </div>
 
     <div class="strength">
-      <h2>Mesajın gücü</h2>
-      <p class="helper">
-        Buraya şifrələnmiş və ya adi bir mesaj yazın – alət onu uzunluq, dinamika və açar sözlərə görə
-        təxmini emosional güc baxımından qiymətləndirəcək.
-      </p>
-      <div class="strength-row">
-        <input
-          id="strengthInput"
-          type="text"
-          placeholder="Məsələn: Ədalət uğrunda susmaq olmaz..."
-        />
-        <button id="strengthBtn" type="button" class="secondary">Qiymətləndir</button>
-      </div>
-      <div id="strengthResult" class="strength-result"></div>
-    </div>
+  <h2>Mesajın gücü</h2>
+  <p class="helper">
+    Buraya şifrələnmiş və ya adi bir mesaj yaz – alət onu uzunluq, dinamika və açar
+    sözlərə görə təxmini emosional güc baxımından qiymətləndirəcək.
+  </p>
+
+  <!-- Input + düymə -->
+  <div class="strength-row">
+    <input
+      id="strengthInput"
+      type="text"
+      placeholder="Məsələn: Ədalət uğrunda susmaq olmaz..."
+    />
+    <button id="strengthBtn" type="button" class="secondary">
+      Qiymətləndir
+    </button>
+  </div>
+
+  <!-- Simvol sayı + ton -->
+  <div class="strength-meta">
+    <span id="msgLength">0 simvol</span>
+    <span id="msgMood">Ton: –</span>
+  </div>
+
+  <!-- Proqres bar -->
+  <div class="strength-bar">
+    <div class="strength-fill" id="strengthFill"></div>
+  </div>
+
+  <!-- Nəticə kartı -->
+  <div id="strengthResult" class="strength-result result-box">
+    <div class="tone-icon" id="toneIcon">💬</div>
+
+    <div id="strengthText"></div>
+
+    <div id="keywordsBox" class="helper" style="margin-top:6px;"></div>
+
+    <button
+      id="improveBtn"
+      type="button"
+      class="secondary small-btn"
+      style="margin-top:6px;"
+    >
+      Mesajı təkmilləşdir
+    </button>
+
+    <div
+      id="improvedMessage"
+      class="helper"
+      style="margin-top:4px; display:none;"
+    ></div>
+  </div>
+
+  <!-- Son 5 nəticənin tarixi -->
+  <div id="strengthHistory" class="strength-history"></div>
+</div>
+
 
     <div class="about">
       <strong>Bu alət “Hüquq nədir?” kitabının oxucuları üçün hazırlanıb.</strong>
@@ -1713,75 +1823,231 @@ function finishTest() {
 }
 
 
+// Mesaj gücü elementləri
+const msgLengthEl = document.getElementById("msgLength");
+const msgMoodEl = document.getElementById("msgMood");
+const strengthFill = document.getElementById("strengthFill");
+const toneIconEl = document.getElementById("toneIcon");
+const strengthTextEl = document.getElementById("strengthText");
+const keywordsBox = document.getElementById("keywordsBox");
+const improveBtn = document.getElementById("improveBtn");
+const improvedMessageEl = document.getElementById("improvedMessage");
+const strengthHistoryEl = document.getElementById("strengthHistory");
 
-    function evaluateStrength(text) {
-      if (!text.trim()) return null;
-      const t = text.trim();
-      let score = 10;
+// yazdıqca simvol sayı
+strengthInput.addEventListener("input", () => {
+  const len = strengthInput.value.length;
+  msgLengthEl.textContent = len + " simvol";
+});
 
-      const len = t.length;
-      score += Math.min(40, len * 1.2);
+// qiymətləndirmə funksiyası
+function evaluateStrength(text) {
+  if (!text.trim()) return null;
+  const t = text.trim();
+  let score = 10;
 
-      const uniqChars = new Set(t.replace(/\s+/g, "").toLowerCase());
-      score += Math.min(20, uniqChars.size * 1.5);
+  const len = t.length;
+  score += Math.min(40, len * 1.2);
 
-      if (/[!]/.test(t)) score += 8;
-      if (/[?]/.test(t)) score += 4;
-      if (/[A-ZƏÖÜĞŞÇ]/.test(t)) score += 4;
+  const uniqChars = new Set(t.replace(/\s+/g, "").toLowerCase());
+  score += Math.min(20, uniqChars.size * 1.5);
 
-      const lower = t.toLowerCase();
-      const strongWords = ["ədalət", "azadlıq", "vicdan", "hüquq", "insan", "missiya", "ümid"];
-      let keywordHit = false;
-      strongWords.forEach((w) => {
-        if (lower.includes(w)) {
-          score += 7;
-          keywordHit = true;
-        }
-      });
+  if (/[!]/.test(t)) score += 8;
+  if (/[?]/.test(t)) score += 4;
+  if (/[A-ZƏÖÜĞŞÇ]/.test(t)) score += 4;
 
-      score = Math.max(0, Math.min(100, Math.round(score)));
+  const lower = t.toLowerCase();
+  const strongWords = ["ədalət", "azadlıq", "vicdan", "hüquq", "insan", "missiya", "ümid"];
 
-      let label = "";
-      let desc = "";
-      if (score >= 75) {
-        label = "Yüksək emosional güc";
-        desc =
-          "Bu mesaj oxucunu hərəkətə gətirə, dəyərlərə toxuna və motivasiya yarada biləcək güclü emosional yüklənməyə malikdir.";
-      } else if (score >= 50) {
-        label = "Orta – düşüncəyə yönəlik mesaj";
-        desc =
-          "Bu mesaj daha çox düşünməyi, analiz etməyi tələb edən, sakit, lakin mənalı vurğuya malikdir.";
-      } else {
-        label = "Sakit və analitik ton";
-        desc =
-          "Bu mesaj emosional partlayışdan çox, məntiqi və məlumatverici təsir üçün uyğundur.";
-      }
-
-      if (keywordHit) {
-        desc +=
-          " Xüsusilə ədalət, insan və hüquqla bağlı açar sözlər mesajın dəyər yönümlü təsirini gücləndirir.";
-      }
-
-      return { score, label, desc };
+  let keywordHit = false;
+  strongWords.forEach((w) => {
+    if (lower.includes(w)) {
+      score += 7;
+      keywordHit = true;
     }
+  });
 
-    strengthBtn.addEventListener("click", () => {
-      const text = strengthInput.value || "";
-      const res = evaluateStrength(text);
-      if (!res) {
-        strengthResultEl.style.display = "none";
-        return;
-      }
-      strengthResultEl.innerHTML = `
-        <div><span class="strength-score">${res.score}/100</span> – ${res.label}</div>
-        <div class="helper" style="margin-top:4px;">${res.desc}</div>
-      `;
-      strengthResultEl.style.display = "block";
-    });
+  score = Math.max(0, Math.min(100, Math.round(score)));
 
-    unlockLevel2Btn.addEventListener("click", () => {
-      level2Wrapper.style.display = "block";
-    });
+  let label = "";
+  let desc = "";
+
+  if (score >= 75) {
+    label = "Yüksək emosional güc";
+    desc =
+      "Bu mesaj oxucunu hərəkətə gətirə, dəyərlərə toxuna və motivasiya yarada biləcək güclü emosional yüklənməyə malikdir.";
+  } else if (score >= 50) {
+    label = "Orta – düşüncəyə yönəlik mesaj";
+    desc =
+      "Bu mesaj daha çox düşünməyi, analiz etməyi tələb edən, sakit, lakin mənalı vurğuya malikdir.";
+  } else {
+    label = "Sakit və analitik ton";
+    desc =
+      "Bu mesaj emosional partlayışdan çox, məntiqi və məlumatverici təsir üçün uyğundur.";
+  }
+
+  if (keywordHit) {
+    desc +=
+      " Xüsusilə ədalət, insan və hüquqla bağlı açar sözlər mesajın dəyər yönümlü təsirini gücləndirir.";
+  }
+
+  // ton + ikon
+  let tone = "Sakit";
+  let icon = "🧊";
+  if (score >= 75) {
+    tone = "Güclü emosional";
+    icon = "🔥";
+  } else if (score >= 50) {
+    tone = "Balanslı";
+    icon = "✨";
+  } else if (score >= 30) {
+    tone = "Analitik";
+    icon = "💬";
+  }
+
+  // açar söz ruhu
+  const keywordsMap = [
+    { word: "ədalət", tag: "ədalət / hüquq" },
+    { word: "hüquq", tag: "hüquq" },
+    { word: "azadlıq", tag: "azadlıq" },
+    { word: "sevgi", tag: "emosiya" },
+    { word: "emosiya", tag: "emosional ton" },
+    { word: "fakt", tag: "analitik ton" },
+    { word: "analiz", tag: "analitik ton" }
+  ];
+  const foundTags = new Set();
+  keywordsMap.forEach(({ word, tag }) => {
+    if (lower.includes(word)) foundTags.add(tag);
+  });
+
+  return {
+    score,
+    label,
+    desc,
+    tone,
+    icon,
+    keywords: [...foundTags]
+  };
+}
+
+// nəticəni ekrana çıxarmaq
+strengthBtn.addEventListener("click", () => {
+  const text = strengthInput.value || "";
+  const res = evaluateStrength(text);
+
+  if (!res) {
+    strengthResultEl.classList.remove("visible");
+    strengthResultEl.style.display = "none";
+    strengthFill.style.width = "0%";
+    msgMoodEl.textContent = "Ton: –";
+    return;
+  }
+
+  strengthResultEl.style.display = "block";
+  // kiçik delay lazım deyil, amma animasiya üçün class ayrıca
+  requestAnimationFrame(() => {
+    strengthResultEl.classList.add("visible");
+  });
+
+  strengthFill.style.width = res.score + "%";
+  toneIconEl.textContent = res.icon;
+  msgMoodEl.textContent = "Ton: " + res.tone;
+
+  strengthTextEl.innerHTML = `
+    <div><span class="strength-score">${res.score}/100</span> – ${res.label}</div>
+    <div class="helper" style="margin-top:4px;">${res.desc}</div>
+  `;
+
+  if (res.keywords.length) {
+    keywordsBox.textContent = "Mesajın açar söz ruhu: " + res.keywords.join(", ");
+  } else {
+    keywordsBox.textContent =
+      "Açar söz tapılmadı – daha çox dəyər və hiss sözləri əlavə etsən ton güclənəcək.";
+  }
+
+  saveStrengthHistory(text, res);
+});
+
+// localStorage-də son 5 nəticə
+function saveStrengthHistory(text, res) {
+  const item = {
+    msg: text.trim().slice(0, 80),
+    score: res.score,
+    time: new Date().toLocaleTimeString("az-Latn-AZ", {
+      hour: "2-digit",
+      minute: "2-digit"
+    })
+  };
+
+  let list = [];
+  try {
+    list = JSON.parse(localStorage.getItem("msgStrengthHistory") || "[]");
+  } catch (e) {
+    list = [];
+  }
+
+  list.unshift(item);
+  list = list.slice(0, 5);
+  localStorage.setItem("msgStrengthHistory", JSON.stringify(list));
+  renderStrengthHistory(list);
+}
+
+function renderStrengthHistory(list) {
+  if (!strengthHistoryEl) return;
+  if (!list || !list.length) {
+    strengthHistoryEl.innerHTML = "";
+    return;
+  }
+
+  strengthHistoryEl.innerHTML =
+    '<div class="helper">Son qiymətləndirmələr:</div>' +
+    list
+      .map(
+        (i) =>
+          `<div class="history-item"><span>${i.time}</span> · <strong>${i.score}/100</strong> – ${i.msg}</div>`
+      )
+      .join("");
+}
+
+// səhifə açılarkən tarixçəni yüklə (init içində çağırmaq da olar)
+(function loadStrengthHistoryOnStart() {
+  try {
+    const list = JSON.parse(localStorage.getItem("msgStrengthHistory") || "[]");
+    renderStrengthHistory(list);
+  } catch (e) {}
+})();
+
+// sadə “Mesajı təkmilləşdir” funksiyası
+function suggestImprovedMessage(text) {
+  let t = text.trim();
+  if (!t) {
+    return "Əvvəl qısa da olsa, nə hiss etdiyini və nə demək istədiyini yaz.";
+  }
+
+  if (t.length < 15) {
+    return (
+      "Mesajını bir az da aç: nəyi, kim üçün və niyə istədiyini bir cümlədə daha aydın yaz. Məsələn: “" +
+      t +
+      ' – bunu ədalətə daha yaxınlaşmaq üçün etmək istəyirəm.”'
+    );
+  }
+
+  if (!/[.!?]$/.test(t)) t += ".";
+
+  t = t.replace(/\b(yaxşı)\b/gi, "daha güclü və aydın");
+  t = t.replace(/\b(istəyirəm)\b/gi, "istəyirəm, çünki bu mənim üçün dəyərdir");
+
+  return t;
+}
+
+improveBtn.addEventListener("click", () => {
+  const text = strengthInput.value || "";
+  const improved = suggestImprovedMessage(text);
+  improvedMessageEl.textContent = improved;
+  improvedMessageEl.style.display = "block";
+});
+
+    
 
 function normalizeAnswer(str) {
   return (str || "")
@@ -2195,6 +2461,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
