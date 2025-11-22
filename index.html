@@ -401,9 +401,12 @@
   margin-top: 22px;
   padding-top: 14px;
   border-top: 1px dashed var(--border-soft);
-  max-width: 900px;        /* blokun eni */
-  margin-left: auto;       /* ortalama */
-  margin-right: auto;      /* ortalama */
+
+  /* PROBLEMİ HƏLL EDƏN HİSSƏ */
+  width: 100%;                 /* kartın içi nə qədər genişdirsə, test də o qədər geniş olsun */
+  max-width: none !important;  /* 900px limiti götürülsün */
+  margin-left: 0 !important;   /* ortalama ləğv olunur */
+  margin-right: 0 !important;
 }
 
     .tests h2 {
@@ -454,7 +457,8 @@
 
 .test-option span {
   display: block;
-  text-align: left;          /* çoxsətirli mətni tam soldan düzləndir */
+  text-align: left;
+  margin-top: 0;
 }
 
     .test-result {
@@ -2167,4 +2171,5 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
