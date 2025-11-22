@@ -1773,79 +1773,118 @@ function normalizeAnswer(str) {
 
 // 🔮 Mistik oyun üçün 10 səviyyəlik şifrə massiv-i
 // 🔮 Mistik oyun üçün 10 səviyyəlik latınca aforizm massiv-i
+// 🔮 Mistik hüquq oyunu üçün yenilənmiş 10 səviyyə
 const darkChapters = [
   {
     id: 1,
     cipher: "LUX IN TENEBRIS LUCET",
-    hint: "Bəzən ən zəif işıq belə yalnız qaranlığın içində görünür. Açar söz: içində parlayan şey.",
-    answer: "lux",
+    hint:
+      "Bəzən insan hüququnu, ədaləti və öz yolunu yalnız içində qaranlıq olanda axtarmağa başlayır. " +
+      "Hüquqşünas üçün bu söz həm metaforik, həm də real mənada “görməyi” mümkün edən başlanğıcdır. " +
+      "Açar söz: qaranlığı yaran ilk şey.",
+    answer: "işıq",
+    accepted: ["işıq", "isiq", "isig", "işig"],
     latin: "Lux in tenebris lucet"
   },
   {
     id: 2,
     cipher: "VERITAS OBSCURA EST",
-    hint: "Həqiqət çox vaxt aydın səthdə deyil, gizli qatların arxasında gizlənir. Açar söz: həqiqətin özü.",
-    answer: "veritas",
+    hint:
+      "Məhkəmədə tərəflər, sübutlar, emosiyalar, siyasət – hamısı həqiqəti pərdələyə bilər. " +
+      "Hüquq nəzəriyyəsində bu anlayış olmadan nə ədalət, nə qanun, nə də mühakimə mənasını tapır. " +
+      "Açar söz: həm fəlsəfədə, həm hüquqda axtarılan əsas məram.",
+    answer: "həqiqət",
+    accepted: ["həqiqət", "heqiqet", "heqiqat", "haqiqet"],
     latin: "Veritas obscura est"
   },
   {
     id: 3,
     cipher: "LEX INIUSTA NON EST LEX",
-    hint: "Ədalətsiz qanun həqiqi qanun deyil deyən məşhur prinsip. Açar söz: bu prinsipin mərkəzində duran anlayış.",
-    answer: "lex",
+    hint:
+      "Bu cümlə təbii hüquq nəzəriyyəsinin ürəyidir: “ədalətsiz qanun, hüquq deyil”. " +
+      "Burada mübahisə mövzusu olan məhz yazılmış norma yox, həmin normanın mahiyyəti və legitimliyidir. " +
+      "Açar söz: həm bu ifadədə, həm də hüququn formal tərəfini bildirən əsas anlayış.",
+    answer: "norma",
+    accepted: ["norma", "norm"],
     latin: "Lex iniusta non est lex"
   },
   {
     id: 4,
     cipher: "FIAT IUSTITIA, PEREAT MUNDUS",
-    hint: "Qoy ədalət yerini tapsın, dünya da dağılmalı olsa belə. Açar söz: bu çağırışın mərkəzində duran qüvvə.",
-    answer: "iustitia",
+    hint:
+      "“Qoy ədalət yerini tapsın, dünya dağılmalı olsa belə” – bu, hüquq realizminin yox, daha çox prinsipial " +
+      "etik mövqenin şüarıdır. Burada tərəziyə qoyulan şey – təhlükəsizliyə qarşı qəti dəyərdir. " +
+      "Açar söz: tərəzidə qanunla yanaşı dayanan, “hər kəsə öz haqqını vermək” kimi də tərif olunan anlayış.",
+    answer: "ədalət",
+    accepted: ["ədalət", "adalet"],
     latin: "Fiat iustitia, pereat mundus"
   },
   {
     id: 5,
     cipher: "DURA LEX, SED LEX",
-    hint: "Qanun bəzən sərtdir, amma yenə də qanundur. Açar söz: bu ifadədə sərt adlandırılan şey.",
-    answer: "lex",
+    hint:
+      "Hüquq bəzən insanın empatiyası ilə ziddiyyətə girir: qanun sərtdir, amma yenə də tətbiq olunur. " +
+      "Pozitivist yanaşma bu cümləni xüsusilə sevir, çünki burada normanın qüvvəsi onun ədalətindən əvvəl gəlir. " +
+      "Açar söz: həm bu ifadədə deyilən, həm də hüququn əsas əlaməti.",
+    answer: "sərtlik",
+    accepted: ["sərtlik", "sertlik"],
     latin: "Dura lex, sed lex"
   },
   {
     id: 6,
     cipher: "AUDI ALTERAM PARTEM",
-    hint: "Hükm verməzdən əvvəl digər tərəfi də dinlə deyən prinsip. Açar söz: hər zaman dinlənməli olan bu “digər tərəf”.",
+    hint:
+      "Ədalətli məhkəmə hüququ yalnız maddələrdən ibarət deyil, həm də prosedur ədalətindən asılıdır. " +
+      "Bu prinsip deyir ki, yalnız bir tərəfi dinləyən hakim, həqiqəti qismən görən şahid kimidir. " +
+      "Açar söz: bu cümlədə “digər tərəf” mənasını verən latın sözü.",
     answer: "alteram",
     latin: "Audi alteram partem"
   },
   {
     id: 7,
     cipher: "IN DUBIO PRO REO",
-    hint: "Şübhə varsa, bu kimin xeyrinə yozulur? Açar söz: bu prinsipin mərkəzində olan şübhə halı.",
-    answer: "dubio",
+    hint:
+      "Cinayət hüququnda təqsirsizlik prezumpsiyası sırf gözəl şüar deyil, sübut yükünün istiqamətini dəyişən qaydadır. " +
+      "Bu cümlə isə şübhənin kimdən, kimə tərəf işədiyini göstərir – çünki əminlik yoxdursa, azadlıqdan məhrumetmə riskli olur. " +
+      "Açar söz: bu ifadənin mahiyyətini təşkil edən söz.",
+    answer: "şübhə",
+    accepted: ["şübhə", "subhe", "şubhe"],
     latin: "In dubio pro reo"
   },
   {
     id: 8,
     cipher: "NEMO IUDEX IN CAUSA SUA",
-    hint: "Heç kəs öz işi üzrə hakim ola bilməz. Açar söz: bu prinsipi başlayan söz.",
+    hint:
+      "Korrupsiya, maraq toqquşması və tərəfkeşlik risklərini düşünəndə bu prinsip önə çıxır: " +
+      "öz işi üzrə hakim olmaq, faktiki olaraq özünü mühakimə etmək deməkdir. " +
+      "Açar söz: bu cümləni başlayaraq “heç kəs” mənasını verən latın sözü.",
     answer: "nemo",
     latin: "Nemo iudex in causa sua"
   },
   {
     id: 9,
     cipher: "SILENTIUM EST ARGUMENTUM",
-    hint: "Bəzən susmaq da mövqe seçməkdir. Açar söz: bu cümlədə dəlilə çevrilən hal.",
-    answer: "silentium",
+    hint:
+      "Bəzən susmaq, açıq imza atmadan da mövqe bildirməkdir: susan şahid, danışmayan hakim, mövqe açıqlamayan institut… " +
+      "Hüquqda bu hal bəzən razılıq, bəzən etiraz, bəzən isə təhlükəli qeyri-müəyyənlik kimi şərh olunur. " +
+      "Açar söz: bu cümlədə dəlilə (“argumentum”) çevrilən hal.",
+    answer: "sükut",
+    accepted: ["sükut", "sukut", "sukud"],
     latin: "Silentium est argumentum"
   },
   {
     id: 10,
     cipher: "UBI IUS, IBI REMEDIUM",
-    hint: "Harada hüquq varsa, orada vasitə də olmalıdır. Açar söz: hüququn varlığını bildirən bu qısa söz.",
-    answer: "ius",
+    hint:
+      "Bu prinsip deyir ki, hüquq yalnız kağız üzərində varsa, yetərli deyil: " +
+      "əgər hüququn varlığından danışırsansa, onu qoruyan real vasitə də olmalıdır. " +
+      "Məhz bu söz, mübahisələrin mərkəz sualını xatırladır: “Burada ümumiyyətlə hüquq varmı?” " +
+      "Açar söz: “harada ədalət varsa, orada…” cümləsindəki nəyin var olduğunu bildirən söz",
+    answer: "hüquq",
+    accepted: ["hüquq", "huquq"],
     latin: "Ubi ius, ibi remedium"
   }
 ];
-
 
     
     function init() {
@@ -2057,6 +2096,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
