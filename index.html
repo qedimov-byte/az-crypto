@@ -918,6 +918,34 @@ input[type="text"] {
   text-decoration: none;
 }
 
+    .det-link-container {
+  width: 100%;
+  margin: 18px 0 10px 0;
+  display: flex;
+  justify-content: flex-start; /* solda saxlayır */
+}
+
+.det-link-big {
+  font-size: 2.4rem;  /* təxminən 3 dəfə böyük */
+  padding: 10px 28px;
+  border-radius: 14px;
+  text-decoration: none;
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--btn-secondary-shadow);
+  transition: 0.12s ease;
+}
+
+.det-link-big:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+  text-decoration: none;
+}
+
     
   </style>
 </head>
@@ -955,20 +983,21 @@ input[type="text"] {
     </div>
 
     <h1 class="header-title">Hüquq nədir? · Kripto lab</h1>
-    <p class="subtitle">
-      Sezar, Atbash, Vigenère, Substitution və hüquqi simvol şifrələri ilə hüququ bir az da oyun kimi
-      kəşf edin. Qaydaları oxuyarkən düşüncəni də şifrələyin.
-    </p>
 
-    <div style="text-align:center; margin-bottom: 18px;">
-  <a
-    href="https://qedimov-byte.github.io/detektiv/"
-    target="_blank"
-    class="det-link"
-  >
+<!-- Detektiv oyunu düyməsi -->
+<div class="det-link-container">
+  <a href="https://qedimov-byte.github.io/detektiv/"
+     target="_blank"
+     class="det-link-big">
     🕵️‍♂️ Detektiv oyunu · 1
   </a>
 </div>
+
+<!-- Alt yazı -->
+<p class="subtitle">
+  Sezar, Atbash, Vigenère, Substitution və hüquqi simvol şifrələri ilə hüququ bir az da oyun kimi
+  kəşf edin. Qaydaları oxuyarkən düşüncəni də şifrələyin.
+</p>
 
     
     <label for="inputText">Mətn</label>
@@ -2576,6 +2605,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
