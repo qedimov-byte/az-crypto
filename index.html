@@ -891,6 +891,32 @@ input[type="text"] {
   display: block;
 }
 
+.det-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  box-shadow: var(--btn-secondary-shadow);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.06s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.det-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.75);
+  text-decoration: none;
+}
 
     
   </style>
@@ -933,6 +959,17 @@ input[type="text"] {
       Sezar, Atbash, Vigenère, Substitution və hüquqi simvol şifrələri ilə hüququ bir az da oyun kimi
       kəşf edin. Qaydaları oxuyarkən düşüncəni də şifrələyin.
     </p>
+
+    <div style="text-align:center; margin-bottom: 18px;">
+  <a
+    href="https://qedimov-byte.github.io/detektiv/"
+    target="_blank"
+    class="det-link"
+  >
+    🕵️‍♂️ Detektiv oyunu · 1
+  </a>
+</div>
+
     
     <label for="inputText">Mətn</label>
     <textarea
@@ -2539,6 +2576,7 @@ function checkPuzzle(i) {
   </script>
 </body>
 </html>
+
 
 
 
